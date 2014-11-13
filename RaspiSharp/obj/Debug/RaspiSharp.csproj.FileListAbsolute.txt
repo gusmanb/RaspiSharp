@@ -1,5 +1,0 @@
-Z:\Raspberry\GPIOTest\RaspiSharp\bin\Debug\libbcm2835.so
-Z:\Raspberry\GPIOTest\RaspiSharp\bin\Debug\RaspiSharp.dll
-Z:\Raspberry\GPIOTest\RaspiSharp\bin\Debug\RaspiSharp.pdb
-Z:\Raspberry\GPIOTest\RaspiSharp\obj\Debug\RaspiSharp.dll
-Z:\Raspberry\GPIOTest\RaspiSharp\obj\Debug\RaspiSharp.pdb

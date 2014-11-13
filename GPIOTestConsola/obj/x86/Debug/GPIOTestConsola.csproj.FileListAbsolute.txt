@@ -1,8 +1,0 @@
-Z:\Raspberry\GPIOTest\GPIOTestConsola\bin\Debug\libbcm2835.so
-Z:\Raspberry\GPIOTest\GPIOTestConsola\bin\Debug\GPIOTestConsola.exe
-Z:\Raspberry\GPIOTest\GPIOTestConsola\bin\Debug\GPIOTestConsola.pdb
-Z:\Raspberry\GPIOTest\GPIOTestConsola\bin\Debug\RaspiSharp.dll
-Z:\Raspberry\GPIOTest\GPIOTestConsola\obj\x86\Debug\GPIOTestConsola.csprojResolveAssemblyReference.cache
-Z:\Raspberry\GPIOTest\GPIOTestConsola\obj\x86\Debug\GPIOTestConsola.exe
-Z:\Raspberry\GPIOTest\GPIOTestConsola\obj\x86\Debug\GPIOTestConsola.pdb
-Z:\Raspberry\GPIOTest\GPIOTestConsola\bin\Debug\RaspiSharp.pdb
