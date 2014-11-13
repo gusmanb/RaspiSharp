@@ -163,6 +163,13 @@ namespace RaspiSharp
             gpio[RPiGPIOPin.RPI_GPIO_P1_12].Function = prevFunction;
         }
 
+        public void Wait(ulong uSecs)
+        {
+
+            RaspDelay.uSDelay(uSecs);
+        
+        }
+        
         public void Dispose()
         {
             DisableSPI();
@@ -170,6 +177,8 @@ namespace RaspiSharp
             DisablePWM();
             Deinit();
         }
+
+        
 
 
     }

@@ -143,7 +143,7 @@ namespace RaspiSharp
         
         }
 
-        public RaspPort CreatePort(string PortName, RPiGPIOPin[] PinList)
+        public RaspSimplePort CreateSimplePort(string PortName, RPiGPIOPin[] PinList)
         {
             List<RaspPin> pins = new List<RaspPin>();
 
@@ -151,13 +151,46 @@ namespace RaspiSharp
             for (int buc = 0; buc < PinList.Length; buc++)
                 pins.Add(internalPins[PinList[buc]]);
 
-            var port = new RaspPort(pins);
+            var port = new RaspSimplePort(pins);
 
             internalPorts.Add(PortName, port);
 
             return port;
         
         }
+
+        public Rasp8bLCDPort Create8bLCDPort(string PortName, RPiGPIOPin[] PinList, RPiGPIOPin EnPin, RPiGPIOPin RsPin, RPiGPIOPin? RwPin)
+        {
+            List<RaspPin> pins = new List<RaspPin>();
+
+
+            for (int buc = 0; buc < PinList.Length; buc++)
+                pins.Add(internalPins[PinList[buc]]);
+
+            var port = new Rasp8bLCDPort(pins, internalPins[EnPin], internalPins[RsPin], RwPin == null ? null : internalPins[RwPin.Value]);
+
+            internalPorts.Add(PortName, port);
+
+            return port;
+
+        }
+
+        public Rasp4bLCDPort Create4bLCDPort(string PortName, RPiGPIOPin[] PinList, RPiGPIOPin EnPin, RPiGPIOPin RsPin, RPiGPIOPin? RwPin)
+        {
+            List<RaspPin> pins = new List<RaspPin>();
+
+
+            for (int buc = 0; buc < PinList.Length; buc++)
+                pins.Add(internalPins[PinList[buc]]);
+
+            var port = new Rasp4bLCDPort(pins, internalPins[EnPin], internalPins[RsPin], RwPin == null ? null : internalPins[RwPin.Value]);
+
+            internalPorts.Add(PortName, port);
+
+            return port;
+
+        }
+
 
         public void DeletePort(string PortName)
         {

@@ -36,6 +36,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="RaspDelay.cs" />
     <Compile Include="RaspExtern.cs" />
     <Compile Include="RaspGPIO.cs" />
     <Compile Include="RaspI2C.cs" />

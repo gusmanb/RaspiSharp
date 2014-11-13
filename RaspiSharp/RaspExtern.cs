@@ -220,6 +220,16 @@ namespace RaspiSharp
             public static extern void bcm2835_pwm_set_data(byte channel, uint data);
         
         }
+
+        public static class Timers
+        {
+
+            [DllImport("libbcm2835.so")]
+            public static extern ulong bcm2835_st_read ();
+            [DllImport("libbcm2835.so")]
+            public static extern void bcm2835_st_delay(ulong offset_micros, ulong micros);
+        
+        }
     }
 
 }
