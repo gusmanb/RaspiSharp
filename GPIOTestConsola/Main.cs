@@ -12,14 +12,14 @@ namespace GPIOTestConsola
 
             var pin = pi.GPIO[RPiGPIOPin.RPI_GPIO_P1_03];
 
-            pin.PullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_OFF;
-            pin.Function = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_OUTP;
+			pin.PullUpDown = PullUpDownControl.Pull_DOWN;
+            pin.Function =  GPIOFunctionSelect.Function_OUTP;
 
             for (int buc = 0; buc < 60; buc++)
             {
-                pin.Status = true;
+                pin.Signal = true;
                 Thread.Sleep(1000);
-                pin.Status = false;
+                pin.Signal = false;
                 Thread.Sleep(1000);
             }
 
