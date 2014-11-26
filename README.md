@@ -3,7 +3,7 @@ RaspiSharp
 
 RaspBerry Pi interface for Mono
 
-Revamped version with tons of improvments:
+Revamped version with tons of improvements:
 
 1-Dual API interface, the old one which is intended to create programs and the new "software" interface.
 2-Modified BCM library with native functions for fast data transfers
@@ -28,6 +28,9 @@ or to send a signal when a byte with a concrete value is received.
 
 THIS IS A WORK IN PROGRESS, EXPECT FAILS.
 
-All released under NoLicense unless specified in the porject Readme
+All released under no license unless specified in the porject Readme
 
 Have fun!
+=======
+
+Remember to execute your programs with elevated privileges or it will not be capable to access the hardware registers.
