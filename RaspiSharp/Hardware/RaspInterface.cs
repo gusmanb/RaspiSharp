@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RaspiSharp.Software;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,13 @@ namespace RaspiSharp
 
         public RaspLowLevel Peripherals { get { return peripherals; } }
 
+		Dictionary<string, RaspPort> internalPorts = new Dictionary<string, RaspPort>();
+
+		public Dictionary<string, RaspPort> InternalPorts
+		{
+			get { return internalPorts; }
+		}
+
         public static void Init()
         {
             lock (locker)
@@ -88,10 +96,10 @@ namespace RaspiSharp
             gpio = new RaspGPIO(model);
         }
 
-        public void EnableSPI(bcm2835SPIMode DataMode = bcm2835SPIMode.BCM2835_SPI_MODE1,
-            bcm2835SPIBitOrder BitOrder = bcm2835SPIBitOrder.BCM2835_SPI_BIT_ORDER_MSBFIRST,
-            bcm2835SPIClockDivider ClockDivider = bcm2835SPIClockDivider.BCM2835_SPI_CLOCK_DIVIDER_256,
-            bcm2835SPIChipSelect ChipSelect = bcm2835SPIChipSelect.BCM2835_SPI_CS0,
+        public void EnableSPI(SPIMode DataMode = SPIMode.MODE1,
+            SPIBitOrder BitOrder = SPIBitOrder.Order_MSBFIRST,
+            SPIClockDivider ClockDivider = SPIClockDivider.Divider_256,
+            ChipSelect ChipSelect = ChipSelect.CS0,
             bool ChipSelectPolarity = false)
         {
 
@@ -132,7 +140,7 @@ namespace RaspiSharp
 
         }
 
-        bcm2835FunctionSelect prevFunction;
+        GPIOFunctionSelect prevFunction;
 
         public void EnablePWM(bcm2835PWMClockDivider Clock = bcm2835PWMClockDivider.BCM2835_PWM_CLOCK_DIVIDER_16384, 
             uint Range = 65535, uint Data = 32767, bool MarkSpace = false, bool Enabled = false)
@@ -146,7 +154,7 @@ namespace RaspiSharp
             if (pwm != null)
                 prevFunction = pin.Function;
 
-            pin.Function = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_ALT5;
+            pin.Function = GPIOFunctionSelect.Function_ALT5;
 
             pwm = new RaspPWM(Clock, Range, Data,MarkSpace, Enabled);
 
@@ -169,7 +177,7 @@ namespace RaspiSharp
             RaspDelay.uSDelay(uSecs);
         
         }
-        
+
         public void Dispose()
         {
             DisableSPI();
@@ -177,9 +185,6 @@ namespace RaspiSharp
             DisablePWM();
             Deinit();
         }
-
-        
-
 
     }
 }

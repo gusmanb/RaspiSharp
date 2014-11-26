@@ -8,17 +8,10 @@ namespace RaspiSharp
     public class RaspGPIO
     {
         Dictionary<RPiGPIOPin, RaspPin> internalPins = new Dictionary<RPiGPIOPin, RaspPin>();
-
-        Dictionary<string, RaspPort> internalPorts = new Dictionary<string, RaspPort>();
-
+		
         public RaspPin this[RPiGPIOPin Key]
         {
             get { return internalPins[Key]; }
-        }
-
-        public RaspPort this[string Key]
-        {
-            get { return internalPorts[Key]; }
         }
 
         public uint GetPadsControl(byte Group)
@@ -143,60 +136,5 @@ namespace RaspiSharp
         
         }
 
-        public RaspSimplePort CreateSimplePort(string PortName, RPiGPIOPin[] PinList)
-        {
-            List<RaspPin> pins = new List<RaspPin>();
-
-
-            for (int buc = 0; buc < PinList.Length; buc++)
-                pins.Add(internalPins[PinList[buc]]);
-
-            var port = new RaspSimplePort(pins);
-
-            internalPorts.Add(PortName, port);
-
-            return port;
-        
-        }
-
-        public Rasp8bLCDPort Create8bLCDPort(string PortName, RPiGPIOPin[] PinList, RPiGPIOPin EnPin, RPiGPIOPin RsPin, RPiGPIOPin? RwPin)
-        {
-            List<RaspPin> pins = new List<RaspPin>();
-
-
-            for (int buc = 0; buc < PinList.Length; buc++)
-                pins.Add(internalPins[PinList[buc]]);
-
-            var port = new Rasp8bLCDPort(pins, internalPins[EnPin], internalPins[RsPin], RwPin == null ? null : internalPins[RwPin.Value]);
-
-            internalPorts.Add(PortName, port);
-
-            return port;
-
-        }
-
-        public Rasp4bLCDPort Create4bLCDPort(string PortName, RPiGPIOPin[] PinList, RPiGPIOPin EnPin, RPiGPIOPin RsPin, RPiGPIOPin? RwPin)
-        {
-            List<RaspPin> pins = new List<RaspPin>();
-
-
-            for (int buc = 0; buc < PinList.Length; buc++)
-                pins.Add(internalPins[PinList[buc]]);
-
-            var port = new Rasp4bLCDPort(pins, internalPins[EnPin], internalPins[RsPin], RwPin == null ? null : internalPins[RwPin.Value]);
-
-            internalPorts.Add(PortName, port);
-
-            return port;
-
-        }
-
-
-        public void DeletePort(string PortName)
-        {
-
-            internalPorts.Remove(PortName);
-        
-        }
     }
 }

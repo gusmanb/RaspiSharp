@@ -85,43 +85,5 @@ namespace RaspiSharp
         
         }
 
-        public void ReadAsync(int Length, Action<byte[]> Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                Callback(Read(Length));
-
-            });
-        
-        }
-
-        public void WriteAsync(byte[] Data, Action Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                Write(Data);
-
-                if (Callback != null)
-                    Callback();
-
-            });
-
-        }
-
-        public void WriteReadAsync(byte[] Data, byte LengthToRead, Action<byte[]> Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                Callback(WriteAndRead(Data, LengthToRead));
-
-            });
-        
-        }
     }
 }

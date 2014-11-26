@@ -1,0 +1,5 @@
+#!/bin/bash
+rm *.o
+rm *.so
+gcc -Wall -fPIC -c *.c
+gcc -shared -Wl,-soname,libbcm_mod.so -o libbcm_mod.so *.o

@@ -12,44 +12,43 @@ namespace RaspiSharp
         IntPtr readBuffer;
         IntPtr writeBuffer;
 
-        bcm2835SPIMode dMode;
-
-        public bcm2835SPIMode DataMode
+        SPIMode dMode;
+        public SPIMode DataMode
         {
             get { return dMode; }
             set { dMode = value; RaspExtern.SPI.bcm2835_spi_setDataMode(value); }
         }
-        bcm2835SPIBitOrder bOrder;
 
-        public bcm2835SPIBitOrder BitOrder
+        SPIBitOrder bOrder;
+        public SPIBitOrder BitOrder
         {
             get { return bOrder; }
             set { bOrder = value; RaspExtern.SPI.bcm2835_spi_setBitOrder(value); }
         }
-        bcm2835SPIClockDivider cDivider;
 
-        public bcm2835SPIClockDivider ClockDivider
+        SPIClockDivider cDivider;
+        public SPIClockDivider ClockDivider
         {
             get { return cDivider; }
             set { cDivider = value; RaspExtern.SPI.bcm2835_spi_setClockDivider(value); }
         }
-        bcm2835SPIChipSelect cSelect;
 
-        public bcm2835SPIChipSelect ChipSelect
+        ChipSelect cSelect;
+        public ChipSelect ChipSelect
         {
             get { return cSelect; }
             set { cSelect = value; RaspExtern.SPI.bcm2835_spi_chipSelect(value); }
         }
-        bool cSelPol;
 
+        bool cSelPol;
         public bool ChipSelectPolarity
         {
             get { return cSelPol; }
             set { cSelPol = value; RaspExtern.SPI.bcm2835_spi_setChipSelectPolarity(ChipSelect, (byte)(value ? 1 : 0)); }
         }
 
-        public RaspSPI(bcm2835SPIMode DataMode, bcm2835SPIBitOrder BitOrder, 
-            bcm2835SPIClockDivider ClockDivider,bcm2835SPIChipSelect ChipSelect, 
+        public RaspSPI(SPIMode DataMode, SPIBitOrder BitOrder, 
+            SPIClockDivider ClockDivider,ChipSelect ChipSelect, 
             bool ChipSelectPolarity)
         { 
         
@@ -99,55 +98,6 @@ namespace RaspiSharp
                 RaspExtern.SPI.bcm2835_spi_transfernb(wData, rData, (uint)read.Length);
 
             return read;
-
-        }
-
-        public void TransferByteAsync(byte Value, Action<byte> Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) => {
-
-                Callback(TransferByte(Value));
-            
-            });
-        
-        }
-
-        public void TransferBufferAsync(byte[] Data, Action<byte[]> Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                Callback(TransferBuffer(Data));
-
-            });
-
-        }
-
-        public void WriteBufferAsync(byte[] Data, Action Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                WriteBuffer(Data);
-                if (Callback != null)
-                    Callback();
-
-            });
-        
-        }
-
-        public void ReadBufferAsync(int Length, Action<byte[]> Callback)
-        {
-
-            ThreadPool.QueueUserWorkItem((o) =>
-            {
-
-                Callback(ReadBuffer(Length));
-
-            });
 
         }
 

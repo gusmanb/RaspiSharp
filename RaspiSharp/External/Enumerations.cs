@@ -5,14 +5,14 @@ using System.Text;
 
 namespace RaspiSharp
 {
-    public enum bcm2835FunctionSelect : byte
+    public enum GPIOFunctionSelect : byte
     {
-        BCM2835_GPIO_FSEL_INPT = 0, BCM2835_GPIO_FSEL_OUTP = 1, BCM2835_GPIO_FSEL_ALT0 = 4, BCM2835_GPIO_FSEL_ALT1 = 5,
-        BCM2835_GPIO_FSEL_ALT2 = 6, BCM2835_GPIO_FSEL_ALT3 = 7, BCM2835_GPIO_FSEL_ALT4 = 3, BCM2835_GPIO_FSEL_ALT5 = 2,
-        BCM2835_GPIO_FSEL_MASK = 7
+		Function_INPT = 0, Function_OUTP = 1, Function_ALT0 = 4, Function_ALT1 = 5,
+		Function_ALT2 = 6,Function_ALT3 = 7,Function_ALT4 = 3,Function_ALT5 = 2,
+		Function_MASK = 7
     }
 
-    public enum bcm2835PUDControl : byte { BCM2835_GPIO_PUD_OFF = 0, BCM2835_GPIO_PUD_DOWN = 1, BCM2835_GPIO_PUD_UP = 2 }
+    public enum PullUpDownControl : byte { Pull_OFF = 0,Pull_DOWN = 1,Pull_UP = 2 }
 
     public enum bcm2835PadGroup : byte { BCM2835_PAD_GROUP_GPIO_0_27 = 0, BCM2835_PAD_GROUP_GPIO_28_45 = 1, BCM2835_PAD_GROUP_GPIO_46_53 = 2 }
 
@@ -84,24 +84,24 @@ namespace RaspiSharp
         RPI_BPLUS_GPIO_J8_40 = 21
     }
 
-    public enum bcm2835SPIBitOrder : byte { BCM2835_SPI_BIT_ORDER_LSBFIRST = 0, BCM2835_SPI_BIT_ORDER_MSBFIRST = 1 }
+    public enum SPIBitOrder : byte { Order_LSBFIRST = 0, Order_MSBFIRST = 1 }
 
-    public enum bcm2835SPIMode : byte { BCM2835_SPI_MODE0 = 0, BCM2835_SPI_MODE1 = 1, BCM2835_SPI_MODE2 = 2, BCM2835_SPI_MODE3 = 3 }
+    public enum SPIMode : byte { MODE0 = 0, MODE1 = 1, MODE2 = 2, MODE3 = 3 }
 
-    public enum bcm2835SPIChipSelect : byte { BCM2835_SPI_CS0 = 0, BCM2835_SPI_CS1 = 1, BCM2835_SPI_CS2 = 2, BCM2835_SPI_CS_NONE = 3 }
+    public enum ChipSelect : byte { CS0 = 0, CS1 = 1, CS2 = 2, None = 3 }
 
-    public enum bcm2835SPIClockDivider : ushort
+    public enum SPIClockDivider : ushort
     {
-        BCM2835_SPI_CLOCK_DIVIDER_65536 = 0, BCM2835_SPI_CLOCK_DIVIDER_32768 = 32768, BCM2835_SPI_CLOCK_DIVIDER_16384 = 16384, BCM2835_SPI_CLOCK_DIVIDER_8192 = 8192,
-        BCM2835_SPI_CLOCK_DIVIDER_4096 = 4096, BCM2835_SPI_CLOCK_DIVIDER_2048 = 2048, BCM2835_SPI_CLOCK_DIVIDER_1024 = 1024, BCM2835_SPI_CLOCK_DIVIDER_512 = 512,
-        BCM2835_SPI_CLOCK_DIVIDER_256 = 256, BCM2835_SPI_CLOCK_DIVIDER_128 = 128, BCM2835_SPI_CLOCK_DIVIDER_64 = 64, BCM2835_SPI_CLOCK_DIVIDER_32 = 32,
-        BCM2835_SPI_CLOCK_DIVIDER_16 = 16, BCM2835_SPI_CLOCK_DIVIDER_8 = 8, BCM2835_SPI_CLOCK_DIVIDER_4 = 4, BCM2835_SPI_CLOCK_DIVIDER_2 = 2,
-        BCM2835_SPI_CLOCK_DIVIDER_1 = 1
+       Divider_65536 = 0,Divider_32768 = 32768,Divider_16384 = 16384,Divider_8192 = 8192,
+       Divider_4096 = 4096,Divider_2048 = 2048,Divider_1024 = 1024,Divider_512 = 512,
+       Divider_256 = 256,Divider_128 = 128,Divider_64 = 64,Divider_32 = 32,
+       Divider_16 = 16,Divider_8 = 8,Divider_4 = 4,Divider_2 = 2,
+       Divider_1 = 1
     }
 
-    public enum bcm2835I2CClockDivider : ushort { BCM2835_I2C_CLOCK_DIVIDER_2500 = 2500, BCM2835_I2C_CLOCK_DIVIDER_626 = 626, BCM2835_I2C_CLOCK_DIVIDER_150 = 150, BCM2835_I2C_CLOCK_DIVIDER_148 = 148 }
+    public enum I2CClockDivider : ushort { BCM2835_I2C_CLOCK_DIVIDER_2500 = 2500,Divider_626 = 626,Divider_150 = 150,Divider_148 = 148 }
 
-    public enum bcm2835I2CReasonCodes : byte { BCM2835_I2C_REASON_OK = 0x00, BCM2835_I2C_REASON_ERROR_NACK = 0x01, BCM2835_I2C_REASON_ERROR_CLKT = 0x02, BCM2835_I2C_REASON_ERROR_DATA = 0x04 }
+    public enum I2CReasonCodes : byte { Reason_OK = 0x00, Reason_ERROR_NACK = 0x01, Reason_ERROR_CLKT = 0x02, Reason_ERROR_DATA = 0x04 }
 
     public enum bcm2835PWMClockDivider : uint
     {
@@ -160,5 +160,15 @@ namespace RaspiSharp
         V2BPlus
 
     }
+
+	public enum DetectEdge : byte
+	{ 
+	
+		Off = 0,
+		Rising = 1,
+		Falling = 2,
+		Both = 3
+	
+	}
 
 }

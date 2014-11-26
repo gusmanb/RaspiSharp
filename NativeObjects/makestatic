@@ -1,0 +1,5 @@
+#!/bin/bash
+rm *.o
+rm *.a
+gcc -Wall -c *.c
+ar -cvq libbcm_mod.a *.o

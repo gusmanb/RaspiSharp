@@ -28,29 +28,84 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Enumerations.cs" />
-    <Compile Include="RaspDelay.cs" />
-    <Compile Include="RaspExtern.cs" />
-    <Compile Include="RaspGPIO.cs" />
-    <Compile Include="RaspI2C.cs" />
-    <Compile Include="RaspInterface.cs" />
-    <Compile Include="RaspLowLevel.cs" />
-    <Compile Include="RaspPin.cs" />
-    <Compile Include="RaspPort.cs" />
-    <Compile Include="RaspPWM.cs" />
-    <Compile Include="RaspSPI.cs" />
+    <Compile Include="External\Constants.cs" />
+    <Compile Include="External\Enumerations.cs" />
+    <Compile Include="Software\ArgTypes.cs" />
+    <Compile Include="Software\Attributes.cs" />
+    <Compile Include="Software\RaspAndGate.cs" />
+    <Compile Include="Software\RaspBuffer.cs" />
+    <Compile Include="Hardware\RaspDelay.cs" />
+    <Compile Include="External\RaspExtern.cs" />
+    <Compile Include="Hardware\RaspGPIO.cs" />
+    <Compile Include="Hardware\RaspI2C.cs" />
+    <Compile Include="Software\RaspBufferEventManipulator.cs" />
+    <Compile Include="Software\RaspBufferMuxDemux.cs" />
+    <Compile Include="Software\RaspBufferToByte.cs" />
+    <Compile Include="Software\RaspBufferToSignal.cs" />
+    <Compile Include="Software\RaspByteMuxDemux.cs" />
+    <Compile Include="Software\RaspByteToBuffer.cs" />
+    <Compile Include="Software\RaspByteToSignal.cs" />
+    <Compile Include="Software\RaspCounter.cs" />
+    <Compile Include="Software\RaspDebouncer.cs" />
+    <Compile Include="Hardware\RaspInterface.cs" />
+    <Compile Include="Hardware\RaspLowLevel.cs" />
+    <Compile Include="Hardware\RaspPin.cs" />
+    <Compile Include="Software\RaspDelay.cs" />
+    <Compile Include="Software\RaspElement.cs" />
+    <Compile Include="Software\RaspFixedSignal.cs" />
+    <Compile Include="Software\RaspSignalMuxDemux.cs" />
+    <Compile Include="Software\RaspNotGate.cs" />
+    <Compile Include="Software\RaspPort.cs" />
+    <Compile Include="Hardware\RaspPWM.cs" />
+    <Compile Include="Hardware\RaspSPI.cs" />
+    <Compile Include="Software\RaspSignalToByte.cs" />
+    <Compile Include="Software\RaspSoftPin.cs" />
+    <Compile Include="Software\RaspSignalToBuffer.cs" />
+    <Compile Include="Software\RaspTimedEvent.cs" />
+    <Compile Include="Utils\TaskRunner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="libbcm2835.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
