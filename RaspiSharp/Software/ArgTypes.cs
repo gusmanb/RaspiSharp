@@ -26,4 +26,11 @@ namespace RaspiSharp.Software
 		public byte Value { get; set; }
 	
 	}
+
+    public class IntegerEventArgs : EventArgs
+    {
+
+        public int Value { get; set; }
+
+    }
 }

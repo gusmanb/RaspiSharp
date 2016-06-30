@@ -8,6 +8,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Virtual gates")]
 	public class RaspNotGate : RaspElement
 	{
+        bool outputState = false;
+
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Output;
 
@@ -16,8 +18,13 @@ namespace RaspiSharp.Software
 		{
 			Runner.AddTask((o) =>
 			{
-				if (Output != null)
-					Output(this, new SignalEventArgs { Signal = !e.Signal });
+                if (outputState == e.Signal)
+                {
+                    outputState = !e.Signal;
+
+                    if (Output != null)
+                        Output(this, new SignalEventArgs { Signal = outputState });
+                }
 			});
 		}
 	}

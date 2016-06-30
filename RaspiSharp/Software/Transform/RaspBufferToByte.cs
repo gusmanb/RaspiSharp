@@ -8,6 +8,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Transformation")]
 	public class RaspBufferToByte : RaspElement
 	{
+        byte outputState = 0;
+
 		public int offset;
 		[RaspProperty]
 		public int Offset
@@ -24,8 +26,16 @@ namespace RaspiSharp.Software
 		{
 			Runner.AddTask((o) =>
 			{
-				if (Output != null)
-					Output(this, new ByteEventArgs { Value = e.Buffer.buffer[offset] });
+
+                var val = e.Buffer.buffer[offset];
+
+                if (val != outputState)
+                {
+                    outputState = val;
+
+                    if (Output != null)
+                        Output(this, new ByteEventArgs { Value = val });
+                }
 			});
 		}
 	}

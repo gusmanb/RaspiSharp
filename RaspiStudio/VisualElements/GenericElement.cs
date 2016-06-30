@@ -26,9 +26,11 @@ namespace RaspiImporter.VisualElements
 		const int containerWidth = 256;
 		const int containerHeight = 128;
 
-		const int labelHeight = 24;
+		const int labelHeight = 40;
+        const int labelNameHeight = 24;
+        const int labelClassHeight = 16;
 
-		static Dictionary<Type, int> itemsPerType = new Dictionary<Type, int>();
+        static Dictionary<Type, int> itemsPerType = new Dictionary<Type, int>();
 
 		public static Dalssoft.DiagramNet.BaseElement GetGenericElement(RaspiImporter.BaseElement Element)
 		{
@@ -41,7 +43,7 @@ namespace RaspiImporter.VisualElements
 
 			Element.Name = old.Name + (++cuantos);
 			Element.ClassType = old.ClassType;
-			Element.ClassName = old.ClassName;
+			Element.InternalClassName = old.InternalClassName;
 
 			itemsPerType[elemType] = cuantos;
 
@@ -84,17 +86,24 @@ namespace RaspiImporter.VisualElements
 			int maxSize = Math.Max(sOutputs, sInputs);
 
 			RectangleGroup group = new RectangleGroup(0, 0, containerWidth, maxSize + labelHeight);
-            group.FillColor1 = Color.DarkGray;
-			group.FillColor2 = Color.Empty;
+            group.FillColor1 = Color.FromArgb(255,80,80,80);
+			group.FillColor2 = Color.DarkGray;
 
-			LabelElement elem = new LabelElement(0, 0, containerWidth, labelHeight);
+			LabelElement elem = new LabelElement(0, 0, containerWidth, labelNameHeight);
 			elem.Text = Element.Name;
-			elem.ForeColor1 = Color.White;
+            elem.ForeColor1 = Color.White;
 			elem.Font = new Font(new FontFamily("Arial"), 12, FontStyle.Bold);
 
 			group.Add("label", elem);
 
-			int sPos = sInputs + addedCols >= maxSize ? padding + labelHeight : ((maxSize - sInputs) / 2) + labelHeight;
+            LabelElement elemC = new LabelElement(0, labelNameHeight, containerWidth, 16);
+            elemC.Text = Element.ClassName;
+            elemC.ForeColor1 = Color.White;
+            elemC.Font = new Font(new FontFamily("Arial"), 8, FontStyle.Bold);
+
+            group.Add("class", elemC);
+
+            int sPos = sInputs + addedCols >= maxSize ? padding + labelHeight : ((maxSize - sInputs) / 2) + labelHeight;
 
 			foreach (var input in Element.Inputs)
 			{
@@ -103,7 +112,7 @@ namespace RaspiImporter.VisualElements
 				node.Label.Text = input.InputName;
 				node.Label.Font = new Font(node.Label.Font.FontFamily, 7);
 
-                node.FillColor1 = input.InputType == IOType.Buffer ? Color.FromArgb(255, 125, 229, 255) : input.InputType == IOType.Byte ? Color.Yellow : Color.GreenYellow;
+                node.FillColor1 = input.InputType == IOType.Integer ? Color.Coral : input.InputType == IOType.Buffer ? Color.FromArgb(255, 125, 229, 255) : input.InputType == IOType.Byte ? Color.Yellow : Color.GreenYellow;
                 node.FillColor2 = Color.Empty;
 				node.Tag = input;
 
@@ -120,7 +129,7 @@ namespace RaspiImporter.VisualElements
 				RectangleNode node = new RectangleNode(sPos, containerWidth - (itemWidth + padding), itemWidth, itemHeight);
 				node.Label.Text = output.OutputName;
 				node.Label.Font = new Font(node.Label.Font.FontFamily, 7);
-				node.FillColor1 = output.OutputType == IOType.Buffer ? Color.FromArgb(255, 125, 229, 255) : output.OutputType == IOType.Byte ? Color.Yellow : Color.GreenYellow;
+				node.FillColor1 = output.OutputType == IOType.Integer ? Color.Coral : output.OutputType == IOType.Buffer ? Color.FromArgb(255, 125, 229, 255) : output.OutputType == IOType.Byte ? Color.Yellow : Color.GreenYellow;
                 node.FillColor2 = Color.Empty;
 				node.Tag = output;
 
@@ -187,4 +196,5 @@ namespace RaspiImporter.VisualElements
 
 	}
 }
+
 

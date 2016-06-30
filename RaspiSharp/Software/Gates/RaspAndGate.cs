@@ -8,6 +8,16 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category="Virtual gates")]
 	public class RaspAndGate : RaspElement
 	{
+
+        int usedInputs = 2;
+
+        [RaspProperty]
+        public int UsedInputs
+        {
+            get { return usedInputs; }
+            set { usedInputs = value; }
+        }
+
 		bool[] signals = new bool[8];
 
 		[RaspOutput(OutputType = IOType.Signal)]
@@ -78,20 +88,19 @@ namespace RaspiSharp.Software
 			Input(e.Signal, 8);
 
 		}
-
-		[RaspInput(InputType = IOType.Signal)]
+        
 		private void Input(bool Signal, int Channel)
 		{
 			Runner.AddTask((o) =>
 			{
-				signals[Channel] = true;
+				signals[Channel] = Signal;
 
 				if (Output == null)
 					return;
 
 				bool outp = true;
 
-				for (int buc = 0; buc < 8; buc++)
+				for (int buc = 0; buc < usedInputs; buc++)
 				{
 
 					if (!signals[buc])

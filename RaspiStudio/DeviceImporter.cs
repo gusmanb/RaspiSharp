@@ -12,31 +12,21 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RaspiImporter
+namespace RaspiStudio
 {
-    [Serializable]
+
 	public class BaseElement
 	{
-        public BaseElement() { }
-        [field: NonSerialized]
-        public event EventHandler NameChanged;
+		public event EventHandler NameChanged;
 		string name;
 		[Category("Design")]
 		[DisplayName("(Name)")]
 		public string Name { get { return name; } set { name = value; if(NameChanged != null)NameChanged(this, EventArgs.Empty); } }
 
-        string className;
+		[Browsable(false)]
+		public string ClassName { get; set; }
 
 		[Browsable(false)]
-		public string InternalClassName { get { return className; } set { className = value; } }
-
-        [Category("Design")]
-        [DisplayName("(Class name)")]
-        [Browsable(true)]
-        [JsonIgnore]
-        public string ClassName { get { return className; } }
-
-        [Browsable(false)]
 		[JsonIgnore]
 		public Type ClassType { get; set; }
 
@@ -58,51 +48,37 @@ namespace RaspiImporter
 
 	}
 
-    [Serializable]
-    public class ElementInputType
+	public class ElementInputType
 	{
 
-		[Browsable(false)]
-		public IOType InputType { get; set; }
-		[Browsable(false)]
-		public string InputName { get; set; }
-		[Browsable(false)]
-		public BaseElement Parent { get; set; }
+		public IOType InputType { get; internal set; }
+		public string InputName { get; internal set; }
+		public BaseElement Parent { get; internal set; }
 	}
 
-    [Serializable]
-    public class ElementOutputType
+	public class ElementOutputType
 	{
 
-		[Browsable(false)]
-		public IOType OutputType { get; set; }
-		[Browsable(false)]
-		public string OutputName { get; set; }
-		[Browsable(false)]
-		public BaseElement Parent { get; set; }
+		public IOType OutputType { get; internal set; }
+		public string OutputName { get; internal set; }
+		public BaseElement Parent { get; internal set; }
 	}
 
-    [Serializable]
-    public class ElementPropertyType
+	public class ElementPropertyType
 	{
-		[Browsable(false)]
-		public string PropertyName { get; set; }
-		[Browsable(false)]
-		public string PropertyType { get; set; }
-		[Browsable(false)]
-		public BaseElement Parent { get; set; }
+		public string PropertyName { get; internal set; }
+		public string PropertyType { get; internal set; }
+		public BaseElement Parent { get; internal set; }
 	}
 
-    [Serializable]
-    public class BaseElementFunctionInfo
+	public class BaseElementFunctionInfo
 	{
-		public BaseElement Parent { get; set; }
+		public BaseElement Parent { get; internal set; }
 		public string FunctionName { get; set; }
 	
 	}
 
-    [Serializable]
-    public class BaseElementLink
+	public class BaseElementLink
 	{
 		public ElementInputType Input { get; set; }
 		public bool InputOnLeft { get; set; }
@@ -250,7 +226,7 @@ namespace RaspiImporter
 					if (attr != null)
 					{
 
-						TypeBuilder tbm = modBuild.DefineType( t.Name + method.Name + "FunctionInfo" + method.GetHashCode(), TypeAttributes.Class | TypeAttributes.Serializable, typeof(BaseElementFunctionInfo));
+						TypeBuilder tbm = modBuild.DefineType( t.Name + method.Name + "FunctionInfo" + method.GetHashCode(), TypeAttributes.Class, typeof(BaseElementFunctionInfo));
 						var pInfo = method.GetParameters();
 
 						foreach (var para in pInfo)
@@ -301,14 +277,14 @@ namespace RaspiImporter
 				elem.Inputs = inputs.ToArray();
 				elem.Outputs = outputs.ToArray();
 				elem.Properties = properts.ToArray();
-				elem.InternalClassName = t.Name;
+				elem.ClassName = t.Name;
 
 				elem.ClassType = t;
 				elem.Name = t.Name;
 
 				storedTypes.Add(elem);
 
-				elemntsByType.Add(elem.InternalClassName, elem);
+				elemntsByType.Add(elem.ClassName, elem);
 			}
 
 		}
@@ -502,7 +478,7 @@ namespace RaspiImporter
 		}
 	}
 
-	public class RaspBinder : SerializationBinder
+	class RaspBinder : SerializationBinder
 	{
 		Type[] types;
 
@@ -531,8 +507,8 @@ namespace RaspiImporter
 		}
 	}
 
-    [Serializable]
-    public class RaspiDeviceFile
+
+	public class RaspiDeviceFile
 	{
 
 		public BaseElement[] Elements { get; set; }
@@ -540,8 +516,7 @@ namespace RaspiImporter
 		public RaspLink[] Links { get; set; }
 	}
 
-    [Serializable]
-    public class RaspPosition
+	public class RaspPosition
 	{
 
 		public string ElementName { get; set; }
@@ -550,8 +525,7 @@ namespace RaspiImporter
 
 	}
 
-    [Serializable]
-    public class RaspLink
+	public class RaspLink
 	{
 
 		public string InputDevice { get; set; }

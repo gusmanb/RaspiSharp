@@ -26,7 +26,8 @@ namespace RaspiSharp.Software
 
 		Signal,
 		Byte,
-		Buffer
+		Buffer,
+        Integer
 
 	}
 }

@@ -25,7 +25,17 @@ namespace RaspiSharp.Software
 			set { this.value = value; }
 		}
 
-		bool outputState;
+        bool valueIsHigh = false;
+
+        [RaspProperty]
+        public bool ValueIsHigh
+        {
+
+            get { return valueIsHigh; }
+            set { this.valueIsHigh = value; }
+        }
+
+        bool outputState;
 
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Output;
@@ -35,7 +45,6 @@ namespace RaspiSharp.Software
 		{
 			Runner.AddTask((o) =>
 			{
-
 				bool newState = true;
 
 				if (e.Buffer.Size - offset >= value.Length)
@@ -53,6 +62,8 @@ namespace RaspiSharp.Software
 				}
 				else
 					newState = false;
+
+                newState = valueIsHigh ? newState : !newState;
 
 				if (newState != outputState && Output != null)
 				{

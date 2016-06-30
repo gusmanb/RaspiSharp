@@ -27,5 +27,6 @@ namespace RaspiSharp.Software
 			set { mode = value; Runner.Dispose(); Runner = new TaskRunner(value); }
 		
 		}
-	}
+        
+    }
 }

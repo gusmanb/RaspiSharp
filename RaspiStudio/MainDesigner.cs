@@ -278,7 +278,7 @@ namespace RaspiImporter
 				foreach (var item in data.Elements)
 				{
 
-					var elem = importer.ElementsByType[item.ClassName];
+					var elem = importer.ElementsByType[item.InternalClassName];
 					var rect = GenericElement.GetGenericElement(elem);
 					elem = rect.Tag as RaspiImporter.BaseElement;
 					elem.Name = item.Name;

@@ -8,8 +8,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category="Math operations")]
 	public class RaspSum : RaspElement
 	{
-		byte valueA;
-		byte valueB;
+		int valueA;
+        int valueB;
 
 		bool clockPolarity = false;
 		[RaspProperty]
@@ -19,14 +19,14 @@ namespace RaspiSharp.Software
 			set { clockPolarity = value; }
 		}
 
-		[RaspOutput(OutputType=IOType.Byte)]
-		public event EventHandler<ByteEventArgs> Output;
+		[RaspOutput(OutputType=IOType.Integer)]
+		public event EventHandler<IntegerEventArgs> Output;
 
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Overflow;
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputA(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputA(object sender, IntegerEventArgs e)
 		{
 
 #if DEBUG
@@ -35,8 +35,8 @@ namespace RaspiSharp.Software
 			valueA = e.Value;
 		}
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputB(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputB(object sender, IntegerEventArgs e)
 		{
 #if DEBUG
 			Console.WriteLine("RaspSum received input B " + e.Value);
@@ -55,8 +55,8 @@ namespace RaspiSharp.Software
 			{
 				if (e.Signal == clockPolarity)
 				{
-					int val = valueA + valueB;
-					byte fVal = (byte)(val & 0xFF);
+					long val = valueA + valueB;
+					int fVal = (int)(val & int.MaxValue);
 
 					bool overflow = val != fVal;
 
@@ -73,7 +73,7 @@ namespace RaspiSharp.Software
 #if DEBUG
 						Console.WriteLine("RaspSum write output " + fVal);
 #endif
-						Output(e, new ByteEventArgs { Value = fVal });
+						Output(e, new IntegerEventArgs { Value = fVal });
 					}
 
 					if (overflow && Overflow != null)
@@ -107,8 +107,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Math operations")]
 	public class RaspSub : RaspElement
 	{
-		byte valueA;
-		byte valueB;
+		int valueA;
+        int valueB;
 
 		bool clockPolarity = false;
 		[RaspProperty]
@@ -118,14 +118,14 @@ namespace RaspiSharp.Software
 			set { clockPolarity = value; }
 		}
 
-		[RaspOutput(OutputType = IOType.Byte)]
-		public event EventHandler<ByteEventArgs> Output;
+		[RaspOutput(OutputType = IOType.Integer)]
+		public event EventHandler<IntegerEventArgs> Output;
 
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Overflow;
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputA(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputA(object sender, IntegerEventArgs e)
 		{
 
 #if DEBUG
@@ -135,8 +135,8 @@ namespace RaspiSharp.Software
 			valueA = e.Value;
 		}
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputB(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputB(object sender, IntegerEventArgs e)
 		{
 #if DEBUG
 			Console.WriteLine("RaspSub received input B " + e.Value);
@@ -153,8 +153,8 @@ namespace RaspiSharp.Software
 			{
 				if (e.Signal == clockPolarity && Output != null)
 				{
-					int val = valueA - valueB;
-					byte fVal = val < 0 ? (byte)(val + 255) : (byte)val;
+					long val = valueA - valueB;
+					int fVal = val < 0 ? (int)(val + int.MaxValue) : (int)val;
 
 					bool overflow = val != fVal;
 
@@ -171,7 +171,7 @@ namespace RaspiSharp.Software
 #if DEBUG
 						Console.WriteLine("RaspSub write output " + fVal);
 #endif
-						Output(e, new ByteEventArgs { Value = fVal });
+						Output(e, new IntegerEventArgs { Value = fVal });
 					}
 
 					if (overflow && Overflow != null)
@@ -205,8 +205,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Math operations")]
 	public class RaspMul : RaspElement
 	{
-		byte valueA;
-		byte valueB;
+		int valueA;
+        int valueB;
 
 		bool clockPolarity = false;
 		[RaspProperty]
@@ -216,20 +216,20 @@ namespace RaspiSharp.Software
 			set { clockPolarity = value; }
 		}
 
-		[RaspOutput(OutputType = IOType.Byte)]
-		public event EventHandler<ByteEventArgs> Output;
+		[RaspOutput(OutputType = IOType.Integer)]
+		public event EventHandler<IntegerEventArgs> Output;
 
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Overflow;
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputA(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputA(object sender, IntegerEventArgs e)
 		{
 			valueA = e.Value;
 		}
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputB(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputB(object sender, IntegerEventArgs e)
 		{
 
 			valueB = e.Value;
@@ -244,8 +244,8 @@ namespace RaspiSharp.Software
 			{
 				if (e.Signal == clockPolarity)
 				{
-					int val = valueA * valueB;
-					byte fVal = (byte)(val & 0xFF);
+					long val = valueA * valueB;
+                    int fVal = (int)(val & int.MaxValue);
 
 					bool overflow = val != fVal;
 
@@ -253,7 +253,7 @@ namespace RaspiSharp.Software
 						Overflow(e, new SignalEventArgs { Signal = clockPolarity });
 
 					if (Output != null)
-						Output(e, new ByteEventArgs { Value = fVal });
+						Output(e, new IntegerEventArgs { Value = fVal });
 
 					if (overflow && Overflow != null)
 						Overflow(e, new SignalEventArgs { Signal = !clockPolarity });
@@ -279,8 +279,8 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Math operations")]
 	public class RaspDiv : RaspElement
 	{
-		byte valueA;
-		byte valueB;
+		int valueA;
+        int valueB;
 
 		bool clockPolarity = false;
 		[RaspProperty]
@@ -290,20 +290,20 @@ namespace RaspiSharp.Software
 			set { clockPolarity = value; }
 		}
 
-		[RaspOutput(OutputType = IOType.Byte)]
-		public event EventHandler<ByteEventArgs> Output;
+		[RaspOutput(OutputType = IOType.Integer)]
+		public event EventHandler<IntegerEventArgs> Output;
 
 		[RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Error;
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputA(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputA(object sender, IntegerEventArgs e)
 		{
 			valueA = e.Value;
 		}
 
-		[RaspInput(InputType = IOType.Byte)]
-		public void InputB(object sender, ByteEventArgs e)
+		[RaspInput(InputType = IOType.Integer)]
+		public void InputB(object sender, IntegerEventArgs e)
 		{
 
 			valueB = e.Value;
@@ -323,14 +323,14 @@ namespace RaspiSharp.Software
 						if(Error != null)
 							Error(e, new SignalEventArgs { Signal = clockPolarity });
 						if(Output != null)
-							Output(e, new ByteEventArgs { Value = 0xFF });
+							Output(e, new IntegerEventArgs { Value = 0xFF });
 						if(Error != null)
 							Error(e, new SignalEventArgs { Signal = !clockPolarity });
 					}
 					else if(Output != null)
 					{
-						byte fVal = (byte)(valueA / valueB);
-						Output(e, new ByteEventArgs { Value = fVal });
+						int fVal = (int)(valueA / valueB);
+						Output(e, new IntegerEventArgs { Value = fVal });
 					
 					}
 					

@@ -8,19 +8,30 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Transformation")]
 	public class RaspByteToSignal : RaspElement
 	{
-		byte[] highValues = new byte[0];
+        byte value = 0;
+        
 
 		bool outputStatus = false;
 
 		[RaspProperty]
-		public byte[] HighValues
+		public byte Value
 		{
 
-			get { return highValues; }
-			set { this.highValues = value; }
+			get { return value; }
+			set { this.value = value; }
 		}
 
-		[RaspOutput(OutputType = IOType.Signal)]
+        bool valueIsHigh = false;
+
+        [RaspProperty]
+        public bool ValueIsHigh
+        {
+
+            get { return valueIsHigh; }
+            set { this.valueIsHigh = value; }
+        }
+        
+        [RaspOutput(OutputType = IOType.Signal)]
 		public event EventHandler<SignalEventArgs> Output;
 
 		[RaspInput(InputType = IOType.Byte)]
@@ -28,9 +39,9 @@ namespace RaspiSharp.Software
 		{
 			Runner.AddTask((o) =>
 			{
-				bool newOut = HighValues.Contains(e.Value);
+                bool newOut = valueIsHigh ? e.Value == value : e.Value != value;
 
-				if (newOut != outputStatus)
+                if (newOut != outputStatus)
 				{
 					outputStatus = newOut;
 					Output(this, new SignalEventArgs { Signal = outputStatus });

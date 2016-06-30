@@ -8,7 +8,9 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Transformation")]
 	public class RaspByteToBuffer : RaspElement
 	{
-		
+
+        byte outputState = 0;
+
 		public RaspBuffer buffer;
 		
 		[RaspProperty]
@@ -44,11 +46,17 @@ namespace RaspiSharp.Software
 		{
 			Runner.AddTask((o) =>
 			{
-				for (int buc = offset; buc < offset + length; buc++)
-					buffer.buffer[buc] = e.Value;
 
-				if (Output != null)
-					Output(this, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = length });
+                if (outputState != e.Value)
+                {
+                    outputState = e.Value;
+
+                    for (int buc = offset; buc < offset + length; buc++)
+                        buffer.buffer[buc] = e.Value;
+
+                    if (Output != null)
+                        Output(this, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = length });
+                }
 			});
 		}
 	}
