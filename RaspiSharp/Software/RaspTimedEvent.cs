@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using BCM2835;
 using static BCM2835.BCM2835Managed;
+using BCM2835;
 
 namespace RaspiSharp.Software
 {
@@ -43,51 +43,78 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType = IOType.Signal)]
 		public void EnableOutput(object sender, SignalEventArgs e)
 		{
+			var wasEnabled = outputEnabled;
 
 			outputEnabled = e.Signal;
 
 			if (outputEnabled)
 			{
-
-				th = new Thread(() =>
+				if (!wasEnabled)
 				{
-					while (outputEnabled)
+#if DEBUG
+					Console.WriteLine("RaspTimedSignalEvent starting timed event");
+#endif
+
+					th = new Thread(() =>
 					{
-
-
-						Runner.AddTask((w) =>
+                        
+						while (outputEnabled)
 						{
-							if (Output != null)
-								Output(this, new SignalEventArgs { Signal = highValue });
-						});
 
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!outputEnabled)
-							return;
+							Runner.AddTask((w) =>
+							{
+								if (Output != null)
+								{
+#if DEBUG
+									Console.WriteLine("RaspTimedSignalEvent output high cycle (" + highValue + ")");
+#endif
+									Output(this, new SignalEventArgs { Signal = highValue });
+								}
+							});
 
-						Runner.AddTask((w) =>
-						{
-							if (Output != null)
-								Output(this, new SignalEventArgs { Signal = !highValue });
-						});
+							BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+							if (!outputEnabled)
+								return;
 
-                        if (!repeat)
-							return;
-					}
+							Runner.AddTask((w) =>
+							{
+								if (Output != null)
+								{
+#if DEBUG
+									Console.WriteLine("RaspTimedSignalEvent output high cycle (" + !highValue + ")");
+#endif
+									Output(this, new SignalEventArgs { Signal = !highValue });
+								}
+							});
 
-				});
+                            BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-				th.Start();
+                            if (!repeat)
+							{
+#if DEBUG
+								Console.WriteLine("RaspTimedSignalEvent event finished");
+#endif
+								return;
+							}
+						}
+
+					});
+
+					th.Start();
+				}
 
 			}
 			else
 			{
-
 				if (th != null)
+				{
+#if DEBUG
+					Console.WriteLine("RaspTimedSignalEvent stopping event");
+#endif
 					th.Abort();
+				}
 			
 			}
 			
@@ -158,52 +185,71 @@ namespace RaspiSharp.Software
 
 			outputEnabled = e.Signal;
 
-			if (!wasEnabled && outputEnabled)
+			if (outputEnabled)
 			{
-				th = new Thread(() =>
+
+				if (!wasEnabled)
 				{
+#if DEBUG
+					Console.WriteLine("RaspTimedByteEvent starting timed event");
+#endif
 
-					ulong start;
-
-					while (outputEnabled)
+					th = new Thread(() =>
 					{
-						if (enableHigh)
+						while (outputEnabled)
 						{
-							Runner.AddTask((w) =>
+							if (enableHigh && Output != null)
 							{
-								Output(this, new ByteEventArgs { Value = highValue });
-							});
+#if DEBUG
+								Console.WriteLine("RaspTimedSignalEvent output high cycle (" + highValue + ")");
+#endif
+								Runner.AddTask((w) =>
+								{
+									Output(this, new ByteEventArgs { Value = highValue });
+								});
+							}
+
+                            BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+
+                            if (!outputEnabled)
+								return;
+
+							if (enableLow && Output != null)
+							{
+#if DEBUG
+								Console.WriteLine("RaspTimedByteEvent output low cycle (" + lowValue + ")");
+#endif
+								Runner.AddTask((w) =>
+								{
+									Output(this, new ByteEventArgs { Value = lowValue });
+								});
+							}
+
+                            BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+
+                            if (!repeat)
+							{
+#if DEBUG
+								Console.WriteLine("RaspTimedByteEvent event finished");
+#endif
+								return;
+							}
 						}
 
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+					});
 
-                        if (!outputEnabled)
-							return;
-
-						if (enableLow)
-						{
-							Runner.AddTask((w) =>
-							{
-								Output(this, new ByteEventArgs { Value = lowValue });
-							});
-						}
-
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
-
-                        if (!repeat)
-							return;
-					}
-
-				});
-
-				th.Start();
-
+					th.Start();
+				}
 			}
 			else
 			{
-
 				if (th != null)
+				{
+#if DEBUG
+					Console.WriteLine("RaspTimedByteEvent stopping event");
+#endif
 					th.Abort();
+				}
 
 			}
 
@@ -301,62 +347,90 @@ namespace RaspiSharp.Software
 
 			outputEnabled = e.Signal;
 
-			if (!wasEnabled && outputEnabled)
+			if (outputEnabled)
 			{
-				th = new Thread(() =>
+				if (!wasEnabled)
 				{
+#if DEBUG
+					Console.WriteLine("RaspTimedBufferEvent starting timed event");
+#endif
 
-					ulong start;
-
-					while (outputEnabled)
+					th = new Thread(() =>
 					{
-
-						if (enableHigh)
+						while (outputEnabled)
 						{
-							Runner.AddTask((w) =>
-							{
-								if (processBuffer)
-									buffer.Load(highValue, offset, highValue.Length);
 
-								if (Output != null)
-									Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = highValue.Length });
-							});
+							if (enableHigh)
+							{
+								Runner.AddTask((w) =>
+								{
+									if (processBuffer)
+									{
+#if DEBUG
+										Console.WriteLine("RaspTimedBufferEvent processing high buffer");
+#endif
+										buffer.Load(highValue, offset, highValue.Length);
+									}
+
+									if (Output != null)
+									{
+#if DEBUG
+										Console.WriteLine("RaspTimedBufferEvent sending high value");
+#endif
+										Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = highValue.Length });
+									}
+								});
+							}
+
+                            BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+
+                            if (!outputEnabled)
+								return;
+
+							if (enableLow)
+							{
+								Runner.AddTask((w) =>
+								{
+									if (processBuffer)
+									{
+#if DEBUG
+										Console.WriteLine("RaspTimedBufferEvent processing low buffer");
+#endif
+										buffer.Load(lowValue, offset, lowValue.Length);
+									}
+
+									if (Output != null)
+									{
+#if DEBUG
+										Console.WriteLine("RaspTimedBufferEvent sending low buffer");
+#endif
+										Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = highValue.Length });
+									}
+								});
+							}
+
+                            BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+
+                            if (!repeat)
+								return;
 						}
 
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
+					});
 
-                        if (!outputEnabled)
-							return;
-
-						if (enableLow)
-						{
-							Runner.AddTask((w) =>
-							{
-								if (processBuffer)
-									buffer.Load(lowValue, offset, lowValue.Length);
-
-								if (Output != null)
-									Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = highValue.Length });
-							});
-						}
-
-                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
-
-                        if (!repeat)
-							return;
-					}
-
-				});
-
-				th.Start();
+					th.Start();
+				}
 
 			}
 			else
 			{
 
 				if (th != null)
+				{
+#if DEBUG
+					Console.WriteLine("RaspTimedBufferEvent stopping event");
+#endif
 					th.Abort();
-
+				}
 			}
 
 		}

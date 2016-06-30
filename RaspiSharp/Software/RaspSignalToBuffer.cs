@@ -69,29 +69,52 @@ namespace RaspiSharp.Software
 
 
 		[RaspOutput(OutputType = IOType.Buffer)]
-		public event EventHandler<BufferEventArgs> Output;
+		public event EventHandler<BufferEventArgs> Output = null;
 
 		[RaspInput(InputType = IOType.Signal)]
 		public void Input(object sender, SignalEventArgs e)
 		{
+#if DEBUG
+			Console.WriteLine("RaspSignalToBuffer received input " + e.Signal);
+#endif
 			Runner.AddTask((o) =>
 			{
 				if (e.Signal && enableHigh)
 				{
-					if(processBuffer)
+					if (processBuffer)
+					{
+#if DEBUG
+						Console.WriteLine("RaspSignalToBuffer processing high buffer");
+#endif
 						buffer.Load(highValue, offset, highValue.Length);
+					}
 
 					if (Output != null)
-						Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = highValue.Length });
+					{
+#if DEBUG
+						Console.WriteLine("RaspSignalToBuffer sending high output");
+#endif
+						Output(this, new BufferEventArgs { Buffer = buffer, Offset = 0, Length = buffer.Size });
+					}
 				}
 				else if (!e.Signal && enableLow)
 				{
-					if(processBuffer)
+					if (processBuffer)
+					{
+#if DEBUG
+						Console.WriteLine("RaspSignalToBuffer processing high buffer");
+#endif
 						buffer.Load(lowValue, offset, lowValue.Length);
+					}
 
 					if (Output != null)
-						Output(this.Output, new BufferEventArgs { Buffer = buffer, Offset = offset, Length = lowValue.Length });
-				
+					{
+
+#if DEBUG
+						Console.WriteLine("RaspSignalToBuffer sending low output");
+#endif
+						Output(this, new BufferEventArgs { Buffer = buffer, Offset = 0, Length = buffer.Size });
+					}
 				}
 			});
 		}

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static BCM2835.BCM2835Managed;
 using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {
@@ -21,10 +21,18 @@ namespace RaspiSharp.Software
 			get { return connectorPin; }
 			set 
 			{ 
-				connectorPin = value;
 				if (internalPin != null)
+				{
+#if DEBUG
+					Console.WriteLine(connectorPin.ToString() + " destroy old pin");
+#endif
 					internalPin.Dispose();
+				}
 
+				connectorPin = value;
+#if DEBUG
+				Console.WriteLine(connectorPin.ToString() + " create new pin");
+#endif
 				internalPin = new RaspPin(connectorPin, bcm2835FunctionSelect.BCM2835_GPIO_FSEL_INPT, bcm2835PUDControl.BCM2835_GPIO_PUD_OFF);
 			}
 		}
@@ -45,6 +53,9 @@ namespace RaspiSharp.Software
 		{
 
 			inputState = e.Signal;
+#if DEBUG
+			Console.WriteLine(connectorPin.ToString() + " Input received: " + e.Signal.ToString());
+#endif
 			internalPin.Signal = e.Signal;
 		
 		}
@@ -59,13 +70,20 @@ namespace RaspiSharp.Software
 
 				if (e.Signal)
 				{
-
+#if DEBUG
+					Console.WriteLine(connectorPin.ToString() + " Switching to output mode");
+#endif
+                    internalPin.Function = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_OUTP;
 					internalPin.EventDetected -= internalPin_EventDetected;
 					internalPin.Signal = inputState;
 				}
 				else
 				{
+#if DEBUG
+					Console.WriteLine(connectorPin.ToString() + " Switching to input mode");
+#endif
 
+					internalPin.Function = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_INPT;
 					internalPin.EventDetected += internalPin_EventDetected;
 					var val = internalPin.Signal;
 
@@ -75,7 +93,13 @@ namespace RaspiSharp.Software
 						outputState = val;
 
 						if (Output != null)
+						{
+#if DEBUG
+							Console.WriteLine(connectorPin.ToString() + " Writting output value");
+#endif
 							Output(this, new SignalEventArgs { Signal = outputState });
+
+						}
 					
 					}
 				
@@ -89,9 +113,10 @@ namespace RaspiSharp.Software
 		{
 			if (e.Signal != outputState)
 			{
-
 				outputState = e.Signal;
-
+#if DEBUG
+				Console.WriteLine(connectorPin.ToString() + " Event detected: " + outputState);
+#endif
 				if (Output != null)
 					Output(this, e);
 			
@@ -104,7 +129,9 @@ namespace RaspiSharp.Software
 
 			if (e.Signal != pullUpsEnabled)
 			{
-
+#if DEBUG
+				Console.WriteLine(connectorPin.ToString() + " Setting pull ups: " + e.Signal);
+#endif
 				pullUpsEnabled = e.Signal;
 				SetPullUps();
 			}
@@ -117,6 +144,10 @@ namespace RaspiSharp.Software
 
 			if (e.Signal != isPullDown)
 			{
+
+#if DEBUG
+				Console.WriteLine(connectorPin.ToString() + " Pull ups are pull down: " + e.Signal);
+#endif
 
 				isPullDown = e.Signal;
 

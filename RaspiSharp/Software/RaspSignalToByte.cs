@@ -48,13 +48,25 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType = IOType.Signal)]
 		public void Input(object sender, SignalEventArgs e)
 		{
-
+#if DEBUG
+			Console.WriteLine("RaspSignalToByte received input " + e.Signal);
+#endif
 			if (Output != null)
 			{
-				if(e.Signal && enableHigh)
+				if (e.Signal && enableHigh)
+				{
+#if DEBUG
+					Console.WriteLine("RaspSignalToByte sending high value " + highValue);
+#endif
 					Output(this, new ByteEventArgs { Value = highValue });
-				else if(!e.Signal && enableLow)
+				}
+				else if (!e.Signal && enableLow)
+				{
+#if DEBUG
+					Console.WriteLine("RaspSignalToByte sending low value " + highValue);
+#endif
 					Output(this, new ByteEventArgs { Value = lowValue });
+				}
 			}
 		
 		}

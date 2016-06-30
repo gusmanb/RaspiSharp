@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {

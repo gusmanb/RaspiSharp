@@ -8,7 +8,7 @@ namespace RaspiSharp
 {
     public static class RaspDelay
     {
-        public static void uSDelay(ulong uSecs)
+        public static void uSDelay(long uSecs)
         {
             BCM2835Managed.bcm2835_delayMicroseconds((long)uSecs);            
         }

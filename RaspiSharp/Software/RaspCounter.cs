@@ -49,10 +49,10 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType = IOType.Signal)]
 		public void Input(object sender, SignalEventArgs e)
 		{
-			Runner.AddTask((o) => {
+			if (!e.Signal)
+				return;
 
-				if (!e.Signal)
-					return;
+			Runner.AddTask((o) => {
 
 				currentValue++;
 

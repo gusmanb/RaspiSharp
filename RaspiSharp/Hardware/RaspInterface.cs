@@ -145,7 +145,7 @@ namespace RaspiSharp
             pwm = null;
         }
 
-        public void Wait(ulong uSecs)
+        public void Wait(long uSecs)
         {
 
             RaspDelay.uSDelay(uSecs);
