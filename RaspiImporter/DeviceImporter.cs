@@ -159,6 +159,9 @@ namespace RaspiImporter
 			foreach (var t in types)
 			{
 
+                if (t == typeof(RaspElement) || t == typeof(RaspPort))
+                    continue;
+
 				var attrs = t.GetCustomAttributes(true);
 
 				string Category = "Unknown";
@@ -442,29 +445,37 @@ namespace RaspiImporter
 			if (value is string)
 			{
 
-				List<byte> buffer = new List<byte>();
+                var valString = (string)value;
 
-				var valString = (string)value;
-				string[] bytes = valString.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                if (valString.StartsWith("@"))
+                    return Encoding.ASCII.GetBytes(valString.Substring(1));
+                else
+                {
 
-				foreach (var v in bytes)
-				{
+                    List<byte> buffer = new List<byte>();
 
-					var s = v.Trim();
 
-					if (s.Length != 4 || s.Substring(0, 2).ToLower() != "0x")
-						throw new InvalidCastException();
+                    string[] bytes = valString.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-					byte b;
+                    foreach (var v in bytes)
+                    {
 
-					if(!byte.TryParse(s.Substring(2), System.Globalization.NumberStyles.AllowHexSpecifier, null, out b))
-						throw new InvalidCastException();
+                        var s = v.Trim();
 
-					buffer.Add(b);
+                        if (s.Length != 4 || s.Substring(0, 2).ToLower() != "0x")
+                            throw new InvalidCastException();
 
-				}
+                        byte b;
 
-				return buffer.ToArray();
+                        if (!byte.TryParse(s.Substring(2), System.Globalization.NumberStyles.AllowHexSpecifier, null, out b))
+                            throw new InvalidCastException();
+
+                        buffer.Add(b);
+
+                    }
+
+                    return buffer.ToArray();
+                }
 
 			}
 			return base.ConvertFrom(context, culture, value);

@@ -7,7 +7,7 @@ using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {
-	[RaspElementCategory(Category="Delay")]
+	[RaspElementCategory(Category="Time")]
 	public class RaspSignalDelay : RaspElement
 	{
 		private long delay;
@@ -36,7 +36,7 @@ namespace RaspiSharp.Software
 
 	}
 
-	[RaspElementCategory(Category = "Delay")]
+	[RaspElementCategory(Category = "Time")]
 	public class RaspByteDelay : RaspElement
 	{
 		private long delay;
@@ -65,7 +65,7 @@ namespace RaspiSharp.Software
 
 	}
 
-	[RaspElementCategory(Category = "Delay")]
+	[RaspElementCategory(Category = "Time")]
 	public class RaspBufferDelay : RaspElement
 	{
 		private long delay;

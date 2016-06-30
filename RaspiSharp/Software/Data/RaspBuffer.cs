@@ -15,7 +15,10 @@ namespace RaspiSharp.Software
 		[RaspProperty]
 		public int Size { get { return buffer.Length; } set { Resize(value, true); } }
 
-		[RaspOutput(OutputType = IOType.Buffer)]
+        [RaspProperty]
+        public byte[] Data { get { return buffer; } set { buffer = value; } }
+
+        [RaspOutput(OutputType = IOType.Buffer)]
 		public event EventHandler<BufferEventArgs> CopiedFrom;
 		[RaspOutput(OutputType = IOType.Buffer)]
 		public event EventHandler<BufferEventArgs> CopiedTo;

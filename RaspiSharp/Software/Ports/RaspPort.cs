@@ -9,7 +9,6 @@ using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {
-    [RaspElementCategory(Category = "Ports")]
     public abstract class RaspPort : RaspElement, IDisposable
     {
 

@@ -8,7 +8,7 @@ using BCM2835;
 
 namespace RaspiSharp.Software
 {
-	[RaspElementCategory(Category="Timed events")]
+	[RaspElementCategory(Category="Time")]
 	public class RaspTimedSignalEvent : RaspElement
 	{
 		bool repeat;
@@ -122,7 +122,7 @@ namespace RaspiSharp.Software
 
 	}
 
-	[RaspElementCategory(Category = "Timed events")]
+	[RaspElementCategory(Category = "Time")]
 	public class RaspTimedByteEvent : RaspElement
 	{
 		bool repeat;
@@ -257,7 +257,7 @@ namespace RaspiSharp.Software
 
 	}
 
-	[RaspElementCategory(Category = "Timed events")]
+	[RaspElementCategory(Category = "Time")]
 	public class RaspTimedBufferEvent : RaspElement
 	{
 		bool repeat;
