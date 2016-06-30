@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -17,7 +19,7 @@ namespace RaspiSharp
             {
 
                 clock = value;
-                RaspExtern.PWM.bcm2835_pwm_set_clock(value);
+                BCM2835Managed.bcm2835_pwm_set_clock(value);
             
             }
         }
@@ -30,7 +32,7 @@ namespace RaspiSharp
             set 
             { 
                 markSpace = value;
-                RaspExtern.PWM.bcm2835_pwm_set_mode(0, value, enabled);
+                BCM2835Managed.bcm2835_pwm_set_mode(0, value, enabled);
             }
         }
 
@@ -42,7 +44,7 @@ namespace RaspiSharp
             set 
             { 
                 enabled = value;
-                RaspExtern.PWM.bcm2835_pwm_set_mode(0, markSpace, value);
+                BCM2835Managed.bcm2835_pwm_set_mode(0, markSpace, value);
             }
         }
 
@@ -54,7 +56,7 @@ namespace RaspiSharp
             set 
             { 
                 range = value;
-                RaspExtern.PWM.bcm2835_pwm_set_range(0, value);
+                BCM2835Managed.bcm2835_pwm_set_range(0, value);
             }
         }
         uint data;
@@ -65,7 +67,7 @@ namespace RaspiSharp
             set 
             { 
                 data = value;
-                RaspExtern.PWM.bcm2835_pwm_set_data(0, value);
+                BCM2835Managed.bcm2835_pwm_set_data(0, value);
             }
         }
 
@@ -79,13 +81,13 @@ namespace RaspiSharp
             markSpace = MarkSpace;
             enabled = Enabled;
 
-            RaspExtern.PWM.bcm2835_pwm_set_mode(0, markSpace, enabled);
+            BCM2835Managed.bcm2835_pwm_set_mode(0, markSpace, enabled);
         
         }
 
         public void Dispose()
         {
-            RaspExtern.PWM.bcm2835_pwm_set_mode(0, markSpace, false);
+            BCM2835Managed.bcm2835_pwm_set_mode(0, markSpace, false);
         }
     }
 }

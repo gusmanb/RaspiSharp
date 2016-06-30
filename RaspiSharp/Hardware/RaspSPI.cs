@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Threading;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -12,50 +14,42 @@ namespace RaspiSharp
         IntPtr readBuffer;
         IntPtr writeBuffer;
 
-        SPIMode dMode;
-        public SPIMode DataMode
+        bcm2835SPIMode dMode;
+        public bcm2835SPIMode DataMode
         {
             get { return dMode; }
-            set { dMode = value; RaspExtern.SPI.bcm2835_spi_setDataMode(value); }
+            set { dMode = value; BCM2835Managed.bcm2835_spi_setDataMode(value); }
         }
 
-        SPIBitOrder bOrder;
-        public SPIBitOrder BitOrder
-        {
-            get { return bOrder; }
-            set { bOrder = value; RaspExtern.SPI.bcm2835_spi_setBitOrder(value); }
-        }
-
-        SPIClockDivider cDivider;
-        public SPIClockDivider ClockDivider
+        bcm2835SPIClockDivider cDivider;
+        public bcm2835SPIClockDivider ClockDivider
         {
             get { return cDivider; }
-            set { cDivider = value; RaspExtern.SPI.bcm2835_spi_setClockDivider(value); }
+            set { cDivider = value; BCM2835Managed.bcm2835_spi_setClockDivider(value); }
         }
 
-        ChipSelect cSelect;
-        public ChipSelect ChipSelect
+        bcm2835SPIChipSelect cSelect;
+        public bcm2835SPIChipSelect ChipSelect
         {
             get { return cSelect; }
-            set { cSelect = value; RaspExtern.SPI.bcm2835_spi_chipSelect(value); }
+            set { cSelect = value; BCM2835Managed.bcm2835_spi_chipSelect(value); }
         }
 
         bool cSelPol;
         public bool ChipSelectPolarity
         {
             get { return cSelPol; }
-            set { cSelPol = value; RaspExtern.SPI.bcm2835_spi_setChipSelectPolarity(ChipSelect, (byte)(value ? 1 : 0)); }
+            set { cSelPol = value; BCM2835Managed.bcm2835_spi_setChipSelectPolarity(ChipSelect, value); }
         }
 
-        public RaspSPI(SPIMode DataMode, SPIBitOrder BitOrder, 
-            SPIClockDivider ClockDivider,ChipSelect ChipSelect, 
+        public RaspSPI(bcm2835SPIMode DataMode,
+            bcm2835SPIClockDivider ClockDivider,bcm2835SPIChipSelect ChipSelect, 
             bool ChipSelectPolarity)
-        { 
-        
-            RaspExtern.SPI.bcm2835_spi_begin();
+        {
+
+            BCM2835Managed.bcm2835_spi_begin();
 
             this.DataMode = DataMode;
-            this.BitOrder = BitOrder;
             this.ClockDivider = ClockDivider;
             this.ChipSelect = ChipSelect;
             this.ChipSelectPolarity = ChipSelectPolarity;
@@ -65,45 +59,47 @@ namespace RaspiSharp
         public byte TransferByte(byte Value)
         {
 
-            return RaspExtern.SPI.bcm2835_spi_transfer(Value);
+            return BCM2835Managed.bcm2835_spi_transfer(Value);
         
         }
 
-        public unsafe byte[] TransferBuffer(byte[] Data)
+        public byte[] TransferBufferPreserve(byte[] Data)
         {
             byte[] read = new byte[Data.Length];
 
-            fixed (byte* wData = Data, rData = read)
-                RaspExtern.SPI.bcm2835_spi_transfernb(wData, rData, (uint)read.Length);
+            BCM2835Managed.bcm2835_spi_transfernb(Data, read, Data.Length);
 
             return read;
 
+        }
+
+        public void TransferBuffer(byte[] Data)
+        {
+            BCM2835Managed.bcm2835_spi_transfern(Data, Data.Length);
+            
         }
 
         public unsafe void WriteBuffer(byte[] Data)
         {
-            fixed (byte* wData = Data)
-                RaspExtern.SPI.bcm2835_spi_writenb(wData, (uint)Data.Length);            
+            BCM2835Managed.bcm2835_spi_writenb(Data, Data.Length);            
         }
 
         public unsafe byte[] ReadBuffer(int Length)
         {
-            byte[] read = new byte[Length];
-            byte[] write = new byte[Length];
+            byte[] data = new byte[Length];
 
             for (int buc = 0; buc < Length; buc++)
-                write[buc] = 255;
+                data[buc] = 255;
 
-            fixed (byte* wData = write, rData = read)
-                RaspExtern.SPI.bcm2835_spi_transfernb(wData, rData, (uint)read.Length);
+           BCM2835Managed.bcm2835_spi_transfern(data, data.Length);
 
-            return read;
+            return data;
 
         }
 
         public void Dispose()
         {
-            RaspExtern.SPI.bcm2835_spi_end();
+            BCM2835Managed.bcm2835_spi_end();
         }
     }
 }

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -11,23 +13,6 @@ namespace RaspiSharp
         static object locker = new object();
 
         volatile static int initCount = 0;
-
-        volatile static bool debug = false;
-
-        public bool Debug
-        {
-
-            get { return debug; }
-            set 
-            { 
-                debug = value;
-
-                if (debug)
-                    RaspExtern.Management.bcm2835_set_debug(1);
-                else
-                    RaspExtern.Management.bcm2835_set_debug(0);
-            }
-        }
 
         RaspberryModel model;
 
@@ -69,8 +54,7 @@ namespace RaspiSharp
             {
                 if (initCount == 0)
                 {
-                    if (RaspExtern.Management.bcm2835_init() == 0)
-                        throw new Exception("Cannot initialize library");
+                    BCM2835Managed.bcm2835_init();
                 }
 
                 initCount++;
@@ -84,7 +68,7 @@ namespace RaspiSharp
                 initCount--;
 
                 if (initCount == 0)
-                    RaspExtern.Management.bcm2835_close();
+                    BCM2835Managed.bcm2835_close();
             }
         }
 
@@ -96,17 +80,16 @@ namespace RaspiSharp
             gpio = new RaspGPIO(model);
         }
 
-        public void EnableSPI(SPIMode DataMode = SPIMode.MODE1,
-            SPIBitOrder BitOrder = SPIBitOrder.Order_MSBFIRST,
-            SPIClockDivider ClockDivider = SPIClockDivider.Divider_256,
-            ChipSelect ChipSelect = ChipSelect.CS0,
+        public void EnableSPI(bcm2835SPIMode DataMode = bcm2835SPIMode.BCM2835_SPI_MODE1,
+            bcm2835SPIClockDivider ClockDivider = bcm2835SPIClockDivider.BCM2835_SPI_CLOCK_DIVIDER_256,
+            bcm2835SPIChipSelect ChipSelect = bcm2835SPIChipSelect.BCM2835_SPI_CS0,
             bool ChipSelectPolarity = false)
         {
 
             if (spi != null)
                 spi.Dispose();
 
-            spi = new RaspSPI(DataMode, BitOrder, ClockDivider, ChipSelect, ChipSelectPolarity);
+            spi = new RaspSPI(DataMode, ClockDivider, ChipSelect, ChipSelectPolarity);
         
         }
 
@@ -140,21 +123,14 @@ namespace RaspiSharp
 
         }
 
-        GPIOFunctionSelect prevFunction;
+        bcm2835FunctionSelect prevFunction;
 
-        public void EnablePWM(bcm2835PWMClockDivider Clock = bcm2835PWMClockDivider.BCM2835_PWM_CLOCK_DIVIDER_16384, 
+        public void EnablePWM(bcm2835PWMClockDivider Clock = bcm2835PWMClockDivider.BCM2835_PWM_CLOCK_DIVIDER_2048, 
             uint Range = 65535, uint Data = 32767, bool MarkSpace = false, bool Enabled = false)
         {
 
             if (pwm != null)
                 pwm.Dispose();
-
-            var pin = gpio[RPiGPIOPin.RPI_GPIO_P1_12];
-
-            if (pwm != null)
-                prevFunction = pin.Function;
-
-            pin.Function = GPIOFunctionSelect.Function_ALT5;
 
             pwm = new RaspPWM(Clock, Range, Data,MarkSpace, Enabled);
 
@@ -167,8 +143,6 @@ namespace RaspiSharp
 
             pwm.Dispose();
             pwm = null;
-
-            gpio[RPiGPIOPin.RPI_GPIO_P1_12].Function = prevFunction;
         }
 
         public void Wait(ulong uSecs)
@@ -185,6 +159,15 @@ namespace RaspiSharp
             DisablePWM();
             Deinit();
         }
+
+    }
+
+    public enum RaspberryModel
+    {
+
+        V1,
+        V2,
+        V2BPlus
 
     }
 }

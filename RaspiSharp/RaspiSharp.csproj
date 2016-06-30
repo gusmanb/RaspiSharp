@@ -71,14 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="External\Constants.cs" />
-    <Compile Include="External\Enumerations.cs" />
     <Compile Include="Software\ArgTypes.cs" />
     <Compile Include="Software\Attributes.cs" />
     <Compile Include="Software\RaspAndGate.cs" />
     <Compile Include="Software\RaspBuffer.cs" />
     <Compile Include="Hardware\RaspDelay.cs" />
-    <Compile Include="External\RaspExtern.cs" />
     <Compile Include="Hardware\RaspGPIO.cs" />
     <Compile Include="Hardware\RaspI2C.cs" />
     <Compile Include="Software\RaspBufferEventManipulator.cs" />
@@ -106,6 +103,12 @@
     <Compile Include="Software\RaspSignalToBuffer.cs" />
     <Compile Include="Software\RaspTimedEvent.cs" />
     <Compile Include="Utils\TaskRunner.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BCM2835Managed\BCM2835Managed\BCM2835Managed.csproj">
+      <Project>{f8733849-8998-463b-8265-30389c34623f}</Project>
+      <Name>BCM2835Managed</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

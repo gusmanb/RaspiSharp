@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -14,17 +16,17 @@ namespace RaspiSharp
             get { return internalPins[Key]; }
         }
 
-        public uint GetPadsControl(byte Group)
+        public uint GetPadsControl(BCM2835Managed.bcm2835PadGroup Group)
         {
 
-            return RaspExtern.GPIO.bcm2835_gpio_pad(Group);
+            return BCM2835Managed.bcm2835_gpio_pad(Group);
         
         }
 
-        public void SetPadsControl(byte Group, uint Strength)
+        public void SetPadsControl(BCM2835Managed.bcm2835PadGroup Group, uint Strength)
         {
 
-            RaspExtern.GPIO.bcm2835_gpio_set_pad(Group, Strength);
+            BCM2835Managed.bcm2835_gpio_set_pad(Group, Strength);
         
         }
 

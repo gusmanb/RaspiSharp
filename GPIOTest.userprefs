@@ -1,6 +1,10 @@
-﻿<Properties>
+﻿<Properties StartupItem="GPIOTestConsola\GPIOTestConsola.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="GPIOTestConsola\Main.cs">
+    <Files>
+      <File FileName="GPIOTestConsola\Main.cs" Line="17" Column="13" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

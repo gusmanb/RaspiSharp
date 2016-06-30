@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static BCM2835.BCM2835Managed;
+using BCM2835;
 
 namespace RaspiSharp.Software
 {
@@ -23,7 +25,7 @@ namespace RaspiSharp.Software
 				if (internalPin != null)
 					internalPin.Dispose();
 
-				internalPin = new RaspPin(connectorPin, GPIOFunctionSelect.Function_INPT, PullUpDownControl.Pull_OFF);
+				internalPin = new RaspPin(connectorPin, bcm2835FunctionSelect.BCM2835_GPIO_FSEL_INPT, bcm2835PUDControl.BCM2835_GPIO_PUD_OFF);
 			}
 		}
 
@@ -128,11 +130,11 @@ namespace RaspiSharp.Software
 		private void SetPullUps()
 		{
 			if (!pullUpsEnabled)
-				internalPin.PullUpDown = PullUpDownControl.Pull_OFF;
+				internalPin.PullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_OFF;
 			else if (!isPullDown)
-				internalPin.PullUpDown = PullUpDownControl.Pull_UP;
+				internalPin.PullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_UP;
 			else
-				internalPin.PullUpDown = PullUpDownControl.Pull_DOWN;
+				internalPin.PullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_DOWN;
 		}
 
 	}

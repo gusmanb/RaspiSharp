@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -17,7 +19,7 @@ namespace RaspiSharp
             {
 
                 slaveAddres = value;
-                RaspExtern.I2C.bcm2835_i2c_setSlaveAddress(value);
+                BCM2835Managed.bcm2835_i2c_setSlaveAddress(value);
 
             
             }
@@ -32,7 +34,7 @@ namespace RaspiSharp
             {
 
                 baudRate = value;
-                RaspExtern.I2C.bcm2835_i2c_set_baudrate(value);
+                BCM2835Managed.bcm2835_i2c_set_baudrate(value);
             
             }
         
@@ -41,7 +43,7 @@ namespace RaspiSharp
         public RaspI2C(byte SlaveAddress, uint BaudRate)
         {
 
-            RaspExtern.I2C.bcm2835_i2c_begin();
+            BCM2835Managed.bcm2835_i2c_begin(false);
 
             this.SlaveAddress = SlaveAddress;
             this.BaudRate = BaudRate;
@@ -50,7 +52,7 @@ namespace RaspiSharp
 
         public void Dispose()
         {
-            RaspExtern.I2C.bcm2835_i2c_end();
+            BCM2835Managed.bcm2835_i2c_end();
         }
 
         public unsafe byte[] Read(int Length)
@@ -58,8 +60,7 @@ namespace RaspiSharp
 
             byte[] data = new byte[Length];
 
-            fixed (byte* bData = data)
-                RaspExtern.I2C.bcm2835_i2c_read(bData, (uint)Length);
+            BCM2835Managed.bcm2835_i2c_read(data, Length);
 
             return data;
         
@@ -68,8 +69,7 @@ namespace RaspiSharp
         public unsafe void Write(byte[] Data)
         {
 
-            fixed (byte* bData = Data)
-                RaspExtern.I2C.bcm2835_i2c_write(bData, (uint)Data.Length);
+            BCM2835Managed.bcm2835_i2c_write(Data, Data.Length);
         
         }
 
@@ -78,8 +78,7 @@ namespace RaspiSharp
 
             byte[] data = new byte[LengthToRead];
 
-            fixed (byte* wData = Data, rData = data)
-                RaspExtern.I2C.bcm2835_i2c_write_read_rs(wData, (uint)Data.Length, rData, (uint)LengthToRead);
+            BCM2835Managed.bcm2835_i2c_write_read_rs(Data, Data.Length, data, LengthToRead);
 
             return data;
         

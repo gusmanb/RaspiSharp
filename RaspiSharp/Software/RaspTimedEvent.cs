@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {
@@ -16,9 +18,9 @@ namespace RaspiSharp.Software
 			get { return repeat; }
 			set { repeat = value; }
 		}
-		ulong halfCycleLength;
+		long halfCycleLength;
 		[RaspProperty]
-		public ulong HalfCycleLength
+		public long HalfCycleLength
 		{
 			get { return halfCycleLength; }
 			set { halfCycleLength = value; }
@@ -49,9 +51,6 @@ namespace RaspiSharp.Software
 
 				th = new Thread(() =>
 				{
-
-					ulong start;
-
 					while (outputEnabled)
 					{
 
@@ -62,8 +61,7 @@ namespace RaspiSharp.Software
 								Output(this, new SignalEventArgs { Signal = highValue });
 						});
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
 						if (!outputEnabled)
 							return;
@@ -74,10 +72,9 @@ namespace RaspiSharp.Software
 								Output(this, new SignalEventArgs { Signal = !highValue });
 						});
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!repeat)
+                        if (!repeat)
 							return;
 					}
 
@@ -108,9 +105,9 @@ namespace RaspiSharp.Software
 			get { return repeat; }
 			set { repeat = value; }
 		}
-		ulong halfCycleLength;
+		long halfCycleLength;
 		[RaspProperty]
-		public ulong HalfCycleLength
+		public long HalfCycleLength
 		{
 			get { return halfCycleLength; }
 			set { halfCycleLength = value; }
@@ -178,10 +175,9 @@ namespace RaspiSharp.Software
 							});
 						}
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!outputEnabled)
+                        if (!outputEnabled)
 							return;
 
 						if (enableLow)
@@ -192,10 +188,9 @@ namespace RaspiSharp.Software
 							});
 						}
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!repeat)
+                        if (!repeat)
 							return;
 					}
 
@@ -226,9 +221,9 @@ namespace RaspiSharp.Software
 			get { return repeat; }
 			set { repeat = value; }
 		}
-		ulong halfCycleLength;
+		long halfCycleLength;
 		[RaspProperty]
-		public ulong HalfCycleLength
+		public long HalfCycleLength
 		{
 			get { return halfCycleLength; }
 			set { halfCycleLength = value; }
@@ -328,10 +323,9 @@ namespace RaspiSharp.Software
 							});
 						}
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!outputEnabled)
+                        if (!outputEnabled)
 							return;
 
 						if (enableLow)
@@ -346,10 +340,9 @@ namespace RaspiSharp.Software
 							});
 						}
 
-						start = RaspExtern.Timers.bcm2835_st_read();
-						RaspExtern.Timers.bcm2835_st_delay(start, HalfCycleLength);
+                        BCM2835Managed.bcm2835_delayMicroseconds(halfCycleLength);
 
-						if (!repeat)
+                        if (!repeat)
 							return;
 					}
 

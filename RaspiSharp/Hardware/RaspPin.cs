@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.IO;
 using RaspiSharp.Software;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -16,8 +18,8 @@ namespace RaspiSharp
 
 		//public RaspPinEvents Events;
 
-		DetectEdge edge = DetectEdge.Off;
-		public DetectEdge Edge
+		RPiDetectorEdge edge = RPiDetectorEdge.Rising;
+		public RPiDetectorEdge Edge
 		{
 
 			get { return edge; }
@@ -25,12 +27,13 @@ namespace RaspiSharp
 			{
 
 				edge = value;
-				RaspExtern.GPIO.setDetectEdge(currentPin, edge);
+                BCM2835Managed.GPIOExtras.set_detect_edge(currentPin, edge);
 
 			}
 		}
 
 		private EventHandler<SignalEventArgs> eventDetected;
+
 		public event EventHandler<SignalEventArgs> EventDetected
 		{
 
@@ -53,54 +56,26 @@ namespace RaspiSharp
 			}
 
 		}
-
-		Thread evtThread;
-		FileStream fevt;
-
+        
 		private void enableEvents()
 		{
-			//var data = RaspExtern.GPIO.setPinEventDetector(currentPin, eventCallback);
-			evtThread = new Thread(() =>
-			{
 
-				if (RaspExtern.GPIO.exportPin(currentPin) != 0)
-					throw new InvalidOperationException("Cannot export pin");
+            BCM2835Managed.GPIOExtras.set_event_detector(currentPin, edge, eventCallback);
 
-				if (RaspExtern.GPIO.prepareManualEventDetector(currentPin) != 0)
-					throw new InvalidOperationException("Cannot enable event detection");
-
-				byte value;
-
-				while (true)
-				{
-					value = RaspExtern.GPIO.manualEventDetect(currentPin);
-
-					if (value == 0xFF)
-						throw new InvalidOperationException("Error reading events");
-
-					if (eventDetected != null)
-						eventDetected(this, new SignalEventArgs { Signal = value == 0 ? false : true });
-
-				}
-
-			});
-			evtThread.Start();
 		}
 
 		private void disableEvents()
 		{
 
-			RaspExtern.GPIO.clearPinEventDetector(currentPin);
-			//fevt.Close();
-			evtThread.Abort();
+            BCM2835Managed.GPIOExtras.remove_event_detector(currentPin);
 		}
 
-		private void eventCallback(byte Value)
+		private void eventCallback(RPiGPIOPin pin, short value)
 		{
 			try
 			{
 				if (eventDetected != null)
-					eventDetected(this, new SignalEventArgs { Signal = Value == 0 ? false : true });
+					eventDetected(this, new SignalEventArgs { Signal = value == 0 ? false : true });
 			}
 			catch (Exception e)
 			{
@@ -118,33 +93,33 @@ namespace RaspiSharp
         public bool Signal
         {
 
-            get { return RaspExtern.GPIO.bcm2835_gpio_lev(currentPin) > 0; }
+            get { return BCM2835Managed.bcm2835_gpio_lev(currentPin); }
             set
             {
                 if (value)
-                    RaspExtern.GPIO.bcm2835_gpio_set(currentPin);
+                    BCM2835Managed.bcm2835_gpio_set(currentPin);
                 else
-                    RaspExtern.GPIO.bcm2835_gpio_clr(currentPin);
+                    BCM2835Managed.bcm2835_gpio_clr(currentPin);
             }
 
         }
 
-        GPIOFunctionSelect currentFunction = GPIOFunctionSelect.Function_INPT;
+        bcm2835FunctionSelect currentFunction = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_INPT;
 
-        public GPIOFunctionSelect Function
+        public bcm2835FunctionSelect Function
         {
 
             get { return currentFunction; }
             set 
             { 
                 currentFunction = value;
-                RaspExtern.GPIO.bcm2835_gpio_fsel(currentPin, currentFunction);
+                BCM2835Managed.bcm2835_gpio_fsel(currentPin, currentFunction);
             }
         }
 
-        PullUpDownControl currentPullUpDown = PullUpDownControl.Pull_DOWN;
+        bcm2835PUDControl currentPullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_OFF;
 
-        public PullUpDownControl PullUpDown
+        public bcm2835PUDControl PullUpDown
         {
 
             get { return currentPullUpDown; }
@@ -152,13 +127,13 @@ namespace RaspiSharp
             {
 
                 currentPullUpDown = value;
-                RaspExtern.GPIO.bcm2835_gpio_set_pud(currentPin, currentPullUpDown);
+                BCM2835Managed.bcm2835_gpio_set_pud(currentPin, currentPullUpDown);
             
             }
         
         }
 
-        public RaspPin(RPiGPIOPin PhysicalPin, GPIOFunctionSelect InitialFunction = GPIOFunctionSelect.Function_INPT, PullUpDownControl InitialPullUpDown = PullUpDownControl.Pull_OFF)
+        public RaspPin(RPiGPIOPin PhysicalPin, bcm2835FunctionSelect InitialFunction = bcm2835FunctionSelect.BCM2835_GPIO_FSEL_INPT, bcm2835PUDControl InitialPullUpDown = bcm2835PUDControl.BCM2835_GPIO_PUD_OFF)
         {
 
             currentPin = PhysicalPin;

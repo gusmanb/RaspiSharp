@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp.Software
 {
 	[RaspElementCategory(Category="Delay")]
 	public class RaspSignalDelay : RaspElement
 	{
-		private ulong delay;
+		private long delay;
 		[RaspProperty]
-		public ulong Delay
+		public long Delay
 		{
 			get { return delay; }
 			set { delay = value; }
@@ -22,11 +24,9 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType=IOType.Signal)]
 		public void Input(object sender, SignalEventArgs e)
 		{
-			ulong start = RaspExtern.Timers.bcm2835_st_read();
-            
 			Runner.AddTask((o) =>
 			{
-				RaspExtern.Timers.bcm2835_st_delay(start, delay);
+                BCM2835Managed.bcm2835_delayMicroseconds(delay);
 
 				if (Output != null)
 					Output(this, e);
@@ -39,9 +39,9 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Delay")]
 	public class RaspByteDelay : RaspElement
 	{
-		private ulong delay;
+		private long delay;
 		[RaspProperty]
-		public ulong Delay
+		public long Delay
 		{
 			get { return delay; }
 			set { delay = value; }
@@ -53,13 +53,11 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType = IOType.Byte)]
 		public void Input(object sender, ByteEventArgs e)
 		{
-			ulong start = RaspExtern.Timers.bcm2835_st_read();
-
 			Runner.AddTask((o) =>
 			{
-				RaspExtern.Timers.bcm2835_st_delay(start, delay);
+                BCM2835Managed.bcm2835_delayMicroseconds(delay);
 
-				if (Output != null)
+                if (Output != null)
 					Output(this, e);
 			});
 
@@ -70,9 +68,9 @@ namespace RaspiSharp.Software
 	[RaspElementCategory(Category = "Delay")]
 	public class RaspBufferDelay : RaspElement
 	{
-		private ulong delay;
+		private long delay;
 		[RaspProperty]
-		public ulong Delay
+		public long Delay
 		{
 			get { return delay; }
 			set { delay = value; }
@@ -84,13 +82,11 @@ namespace RaspiSharp.Software
 		[RaspInput(InputType = IOType.Buffer)]
 		public void Input(object sender, BufferEventArgs e)
 		{
-			ulong start = RaspExtern.Timers.bcm2835_st_read();
-
 			Runner.AddTask((o) =>
 			{
-				RaspExtern.Timers.bcm2835_st_delay(start, delay);
+                BCM2835Managed.bcm2835_delayMicroseconds(delay);
 
-				if (Output != null)
+                if (Output != null)
 					Output(this, e);
 			});
 

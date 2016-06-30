@@ -16,6 +16,7 @@ namespace RaspiSharp.Software
 			Runner = new TaskRunner(TaskMode.AsynchronousLowPriority);
 		
 		}
+
 		TaskMode mode = TaskMode.AsynchronousLowPriority;
 
 		[RaspProperty]

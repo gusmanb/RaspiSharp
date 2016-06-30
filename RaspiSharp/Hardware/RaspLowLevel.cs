@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
+using static BCM2835.BCM2835Managed;
 
 namespace RaspiSharp
 {
@@ -10,14 +12,14 @@ namespace RaspiSharp
         public uint this[uint address]
         {
 
-            get { return RaspExtern.LowLevel.bcm2835_peri_read(address); }
-            set { RaspExtern.LowLevel.bcm2835_peri_write(address, value); }
+            get { return BCM2835Managed.bcm2835_peri_read(address); }
+            set { BCM2835Managed.bcm2835_peri_write(address, value); }
         }
 
         public void WriteWithMask(uint Address, uint Value, uint Mask)
         {
 
-            RaspExtern.LowLevel.bcm2835_peri_set_bits(Address, Value, Mask);
+            BCM2835Managed.bcm2835_peri_set_bits(Address, Value, Mask);
         
         }
     }

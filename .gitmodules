@@ -1,0 +1,3 @@
+[submodule "BCM2835Managed"]
+	path = BCM2835Managed
+	url = https://github.com/gusmanb/BCM2835Managed

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BCM2835;
 
 namespace RaspiSharp
 {
@@ -9,10 +10,7 @@ namespace RaspiSharp
     {
         public static void uSDelay(ulong uSecs)
         {
-
-            ulong start = RaspExtern.Timers.bcm2835_st_read();
-            RaspExtern.Timers.bcm2835_st_delay(start, uSecs);
-
+            BCM2835Managed.bcm2835_delayMicroseconds((long)uSecs);            
         }
     }
 }
