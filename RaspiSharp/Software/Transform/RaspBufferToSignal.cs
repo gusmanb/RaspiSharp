@@ -47,9 +47,9 @@ namespace RaspiSharp.Software
 			{
 				bool newState = true;
 
-				if (e.Buffer.Size - offset >= value.Length)
+				if (e.Buffer.Size - (offset + e.Offset) >= value.Length)
 				{
-					for (int buc = offset; buc < offset + value.Length; buc++)
+					for (int buc = e.Offset + offset; buc < e.Offset + offset + value.Length; buc++)
 					{
 						if (e.Buffer.buffer[buc] != value[buc - offset])
 						{

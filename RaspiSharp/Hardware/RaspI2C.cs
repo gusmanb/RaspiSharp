@@ -60,7 +60,7 @@ namespace RaspiSharp
 
             byte[] data = new byte[Length];
 
-            BCM2835Managed.bcm2835_i2c_read(data, Length);
+            BCM2835Managed.bcm2835_i2c_read(data);
 
             return data;
         
@@ -69,7 +69,7 @@ namespace RaspiSharp
         public unsafe void Write(byte[] Data)
         {
 
-            BCM2835Managed.bcm2835_i2c_write(Data, Data.Length);
+            BCM2835Managed.bcm2835_i2c_write(Data);
         
         }
 
@@ -78,7 +78,7 @@ namespace RaspiSharp
 
             byte[] data = new byte[LengthToRead];
 
-            BCM2835Managed.bcm2835_i2c_write_read_rs(Data, Data.Length, data, LengthToRead);
+            BCM2835Managed.bcm2835_i2c_write_read_rs(Data, data);
 
             return data;
         

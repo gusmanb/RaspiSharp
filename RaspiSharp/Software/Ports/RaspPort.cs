@@ -35,406 +35,276 @@ namespace RaspiSharp.Software
         public virtual void Dispose() { }
     }
 
-    //[RaspElementCategory(Category = "Ports")]
-    //public class RaspBitPort : RaspPort
-    //{
-    //	RPiGPIOPin dataPin;
-
-    //	[RaspProperty]
-    //	public RPiGPIOPin DataPin
-    //	{
-    //		get { return dataPin; }
-    //		set { dataPin = value; }
-    //	}
-
-    //	RPiGPIOPin clockPin;
-
-    //	[RaspProperty]
-    //	public RPiGPIOPin ClockPin
-    //	{
-    //		get { return clockPin; }
-    //		set { clockPin = value; }
-    //	}
-
-    //	bool polarity;
-
-    //	[RaspProperty]
-    //	public bool Polarity
-    //	{
-    //		get { return polarity; }
-    //		set { polarity = value; }
-    //	}
-
-    //	UInt32 lowCycle;
-
-    //	[RaspProperty]
-    //	public UInt32 LowCycle
-    //	{
-    //		get { return lowCycle; }
-    //		set { lowCycle = value; }
-    //	}
-
-    //	UInt32 highCycle;
-
-    //	[RaspProperty]
-    //	public UInt32 HighCycle
-    //	{
-    //		get { return highCycle; }
-    //		set { highCycle = value; }
-    //	}
-
-    //	public override event EventHandler<BufferEventArgs> ReadBegin;
-    //	public override event EventHandler<BufferEventArgs> ReadEnd;
-    //	public override event EventHandler<BufferEventArgs> WriteBegin;
-    //	public override event EventHandler<BufferEventArgs> WriteEnd;
-    //	public override event EventHandler<BufferEventArgs> TransferBegin;
-    //	public override event EventHandler<BufferEventArgs> TransferEnd;
-
-    //	public unsafe override void ReadBuffer(object sender, BufferEventArgs e)
-    //	{
-
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (ReadBegin != null)
-    //				ReadBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readBitBangByte(dataPin, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.readBitBangBuffer(bData + e.Offset, (uint)e.Length, dataPin, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (ReadEnd != null)
-    //				ReadEnd(this, e);
-    //		});
-    //	}
-
-    //	public unsafe override void WriteBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (WriteBegin != null)
-    //				WriteBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				RaspExtern.Ports.writeBitBangByte(e.Buffer.buffer[e.Offset], dataPin, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.writeBitBangBuffer(bData + e.Offset, (uint)e.Length, dataPin, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (WriteEnd != null)
-    //				WriteEnd(this, e); ;
-    //		});
-    //	}
-
-    //	public unsafe override void TransferBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (TransferBegin != null)
-    //				TransferBegin(this, e);
-
-    //			if (e.Length == 1)
-    //			{
-    //				RaspExtern.Ports.writeBitBangByte(e.Buffer.buffer[e.Offset], dataPin, clockPin, polarity, lowCycle, highCycle);
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readBitBangByte(dataPin, clockPin, polarity, lowCycle, highCycle);
-    //			}
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //				{
-    //					RaspExtern.Ports.writeBitBangBuffer(bData + e.Offset, (uint)e.Length, dataPin, clockPin, polarity, lowCycle, highCycle);
-    //					RaspExtern.Ports.readBitBangBuffer(bData + e.Offset, (uint)e.Length, dataPin, clockPin, polarity, lowCycle, highCycle);
-    //				}
-    //			}
-
-    //			if (TransferEnd != null)
-    //				TransferEnd(this, e);
-    //		});
-    //	}
-
-    //}
-
-    //[RaspElementCategory(Category = "Ports")]
-    //public class RaspNibblePort : RaspPort
-    //{
-    //	RPiGPIOPin dataPin0;
-    //	[RaspProperty]
-    //	public RPiGPIOPin DataPin0
-    //	{
-    //		get { return dataPin0; }
-    //		set { dataPin0 = value; }
-    //	}
-    //	RPiGPIOPin dataPin1;
-    //	[RaspProperty]
-    //	public RPiGPIOPin DataPin1
-    //	{
-    //		get { return dataPin1; }
-    //		set { dataPin1 = value; }
-    //	}
-    //	RPiGPIOPin dataPin2;
-    //	[RaspProperty]
-    //	public RPiGPIOPin DataPin2
-    //	{
-    //		get { return dataPin2; }
-    //		set { dataPin2 = value; }
-    //	}
-    //	RPiGPIOPin dataPin3;
-    //	[RaspProperty]
-    //	public RPiGPIOPin DataPin3
-    //	{
-    //		get { return dataPin3; }
-    //		set { dataPin3 = value; }
-    //	}
-    //	RPiGPIOPin clockPin;
-    //	[RaspProperty]
-    //	public RPiGPIOPin ClockPin
-    //	{
-    //		get { return clockPin; }
-    //		set { clockPin = value; }
-    //	}
-
-    //	bool polarity;
-    //	[RaspProperty]
-    //	public bool Polarity
-    //	{
-    //		get { return polarity; }
-    //		set { polarity = value; }
-    //	}
-
-    //	UInt32 lowCycle;
-    //	[RaspProperty]
-    //	public UInt32 LowCycle
-    //	{
-    //		get { return lowCycle; }
-    //		set { lowCycle = value; }
-    //	}
-
-    //	UInt32 highCycle;
-    //	[RaspProperty]
-    //	public UInt32 HighCycle
-    //	{
-    //		get { return highCycle; }
-    //		set { highCycle = value; }
-    //	}
-
-    //	public override event EventHandler<BufferEventArgs> ReadBegin;
-    //	public override event EventHandler<BufferEventArgs> ReadEnd;
-    //	public override event EventHandler<BufferEventArgs> WriteBegin;
-    //	public override event EventHandler<BufferEventArgs> WriteEnd;
-    //	public override event EventHandler<BufferEventArgs> TransferBegin;
-    //	public override event EventHandler<BufferEventArgs> TransferEnd;
-
-    //	public unsafe override void ReadBuffer(object sender, BufferEventArgs e)
-    //	{
-
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (ReadBegin != null)
-    //				ReadBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readNibbleByte(dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.readNibbleBuffer(bData + e.Offset, (uint)e.Length, dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (ReadEnd != null)
-    //				ReadEnd(this, e);
-    //		});
-    //	}
-
-    //	public unsafe override void WriteBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (WriteBegin != null)
-    //				WriteBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				RaspExtern.Ports.writeNibbleByte(e.Buffer.buffer[e.Offset], dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.writeNibbleBuffer(bData + e.Offset, (uint)e.Length, dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (WriteEnd != null)
-    //				WriteEnd(this, e);
-    //		});
-    //	}
-
-    //	public unsafe override void TransferBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (TransferBegin != null)
-    //				TransferBegin(this, e);
-
-    //			if (e.Length == 1)
-    //			{
-    //				RaspExtern.Ports.writeNibbleByte(e.Buffer.buffer[e.Offset], dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readNibbleByte(dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //			}
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //				{
-    //					RaspExtern.Ports.writeNibbleBuffer(bData + e.Offset, (uint)e.Length, dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //					RaspExtern.Ports.readNibbleBuffer(bData + e.Offset, (uint)e.Length, dataPin0, dataPin1, dataPin2, dataPin3, clockPin, polarity, lowCycle, highCycle);
-    //				}
-    //			}
-
-    //			if (TransferEnd != null)
-    //				TransferEnd(this, e);
-    //		});
-    //	}
-
-    //}
-
-    //[RaspElementCategory(Category = "Ports")]
-    //public class RaspOctetPort : RaspPort
-    //{
-    //	RPiGPIOPin[] pinList;
-
-    //	public RPiGPIOPin[] PinList
-    //	{
-    //		get { return pinList; }
-    //		set { pinList = value; }
-    //	}
-
-    //	RPiGPIOPin clockPin;
-
-    //	public RPiGPIOPin ClockPin
-    //	{
-    //		get { return clockPin; }
-    //		set { clockPin = value; }
-    //	}
-
-    //	bool polarity;
-
-    //	[RaspProperty]
-    //	public bool Polarity
-    //	{
-    //		get { return polarity; }
-    //		set { polarity = value; }
-    //	}
-
-    //	UInt32 lowCycle;
-
-    //	[RaspProperty]
-    //	public UInt32 LowCycle
-    //	{
-    //		get { return lowCycle; }
-    //		set { lowCycle = value; }
-    //	}
-
-    //	UInt32 highCycle;
-
-    //	[RaspProperty]
-    //	public UInt32 HighCycle
-    //	{
-    //		get { return highCycle; }
-    //		set { highCycle = value; }
-    //	}
-
-    //	public override event EventHandler<BufferEventArgs> ReadBegin;
-    //	public override event EventHandler<BufferEventArgs> ReadEnd;
-    //	public override event EventHandler<BufferEventArgs> WriteBegin;
-    //	public override event EventHandler<BufferEventArgs> WriteEnd;
-    //	public override event EventHandler<BufferEventArgs> TransferBegin;
-    //	public override event EventHandler<BufferEventArgs> TransferEnd;
-
-    //	public unsafe override void ReadBuffer(object sender, BufferEventArgs e)
-    //	{
-
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (ReadBegin != null)
-    //				ReadBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readOctetByte(pinList, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.readOctetBuffer(bData + e.Offset, (uint)e.Length, pinList, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (ReadEnd != null)
-    //				ReadEnd(this, e);
-    //		});
-    //	}
-
-    //	public unsafe override void WriteBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (WriteBegin != null)
-    //				WriteBegin(this, e);
-
-    //			if (e.Length == 1)
-    //				RaspExtern.Ports.writeOctetByte(e.Buffer.buffer[e.Offset], pinList, clockPin, polarity, lowCycle, highCycle);
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //					RaspExtern.Ports.writeOctetBuffer(bData + e.Offset, (uint)e.Length, pinList, clockPin, polarity, lowCycle, highCycle);
-
-    //			}
-
-    //			if (WriteEnd != null)
-    //				WriteEnd(this, e);
-    //		});
-    //	}
-
-    //	public unsafe override void TransferBuffer(object sender, BufferEventArgs e)
-    //	{
-    //		Runner.AddTask((o) =>
-    //		{
-    //			if (TransferBegin != null)
-    //				TransferBegin(this, e);
-
-    //			if (e.Length == 1)
-    //			{
-    //				RaspExtern.Ports.writeOctetByte(e.Buffer.buffer[e.Offset], pinList, clockPin, polarity, lowCycle, highCycle);
-    //				e.Buffer.buffer[e.Offset] = RaspExtern.Ports.readOctetByte(pinList, clockPin, polarity, lowCycle, highCycle);
-    //			}
-    //			else
-    //			{
-
-    //				fixed (byte* bData = e.Buffer.buffer)
-    //				{
-    //					RaspExtern.Ports.writeOctetBuffer(bData + e.Offset, (uint)e.Length, pinList, clockPin, polarity, lowCycle, highCycle);
-    //					RaspExtern.Ports.readOctetBuffer(bData + e.Offset, (uint)e.Length, pinList, clockPin, polarity, lowCycle, highCycle);
-    //				}
-    //			}
-
-    //			if (TransferEnd != null)
-    //				TransferEnd(this, e);
-    //		});
-    //	}
-
-    //}
-
+    [RaspElementCategory(Category = "Ports")]
+    public class RaspBitbangPort : RaspPort
+    {
+
+        bitbang_port port = new bitbang_port();
+        
+        [RaspProperty]
+        public RPiGPIOPin DataInputPin
+        {
+            get { return port.input_pin; }
+            set { port.input_pin = value; port.needs_update = true; }
+        }
+        
+        [RaspProperty]
+        public RPiGPIOPin DataOutputPin
+        {
+            get { return port.output_pin; }
+            set { port.output_pin = value; port.needs_update = true; }
+
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin ClockPin
+        {
+            get { return port.clock_pin; }
+            set { port.clock_pin = value; port.needs_update = true; }
+        }
+        
+        [RaspProperty]
+        public bool Polarity
+        {
+            get { return port.positive_polarity; }
+            set { port.positive_polarity = value; }
+        }
+        
+        [RaspProperty]
+        public UInt32 LowCycle
+        {
+            get { return port.low_delay; }
+            set { port.low_delay = value; }
+        }
+        
+        [RaspProperty]
+        public UInt32 HighCycle
+        {
+            get { return port.high_delay; }
+            set { port.high_delay = value; }
+        }
+
+        public override event EventHandler<BufferEventArgs> ReadBegin;
+        public override event EventHandler<BufferEventArgs> ReadEnd;
+        public override event EventHandler<BufferEventArgs> WriteBegin;
+        public override event EventHandler<BufferEventArgs> WriteEnd;
+        public override event EventHandler<BufferEventArgs> TransferBegin;
+        public override event EventHandler<BufferEventArgs> TransferEnd;
+
+        public override void ReadBuffer(object sender, BufferEventArgs e)
+        {
+
+            Runner.AddTask((o) =>
+            {
+                if (ReadBegin != null)
+                    ReadBegin(this, e);
+
+                if (e.Length == 1)
+                    e.Buffer.buffer[e.Offset] = BCM2835Managed.GPIOExtras.read_bitbang_byte(port);
+                else
+                {
+                    var segment = new ArraySegment<byte>(e.Buffer.buffer, e.Offset, e.Length);
+                    BCM2835Managed.GPIOExtras.read_bitbang_buffer(port, segment);
+                }
+
+                if (ReadEnd != null)
+                    ReadEnd(this, e);
+            });
+        }
+
+        public override void WriteBuffer(object sender, BufferEventArgs e)
+        {
+            Runner.AddTask((o) =>
+            {
+                if (WriteBegin != null)
+                    WriteBegin(this, e);
+
+                if (e.Length == 1)
+                    BCM2835Managed.GPIOExtras.write_bitbang_byte(port, e.Buffer.buffer[e.Offset]);
+                else
+                {
+                    var segment = new ArraySegment<byte>(e.Buffer.buffer, e.Offset, e.Length);
+                    BCM2835Managed.GPIOExtras.write_bitbang_buffer(port, segment);
+                }
+
+                if (WriteEnd != null)
+                    WriteEnd(this, e); ;
+            });
+        }
+
+        public override void TransferBuffer(object sender, BufferEventArgs e)
+        {
+            Runner.AddTask((o) =>
+            {
+                if (TransferBegin != null)
+                    TransferBegin(this, e);
+
+                if (e.Length == 1)
+                {
+                    BCM2835Managed.GPIOExtras.write_bitbang_byte(port, e.Buffer.buffer[e.Offset]);
+                    e.Buffer.buffer[e.Offset] = BCM2835Managed.GPIOExtras.read_bitbang_byte(port);
+                }
+                else
+                {
+
+                    var segment = new ArraySegment<byte>(e.Buffer.buffer, e.Offset, e.Length);
+                    BCM2835Managed.GPIOExtras.write_bitbang_buffer(port, segment);
+                    BCM2835Managed.GPIOExtras.read_bitbang_buffer(port, segment);
+
+                }
+
+                if (TransferEnd != null)
+                    TransferEnd(this, e);
+            });
+        }
+
+    }
+
+    [RaspElementCategory(Category = "Ports")]
+    public class RaspNibblePort : RaspPort
+    {
+        nibble_port port = new nibble_port();
+        
+        [RaspProperty]
+        public RPiGPIOPin DB4Pin
+        {
+            get { return port.db4_pin; }
+            set { port.db4_pin = value; port.needs_update = true; }
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin DB5Pin
+        {
+            get { return port.db5_pin; }
+            set { port.db5_pin = value; port.needs_update = true; }
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin DB6Pin
+        {
+            get { return port.db6_pin; }
+            set { port.db6_pin = value; port.needs_update = true; }
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin DB7Pin
+        {
+            get { return port.db7_pin; }
+            set { port.db7_pin = value; port.needs_update = true; }
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin EPin
+        {
+            get { return port.e_pin; }
+            set { port.e_pin = value; port.needs_update = true; }
+        }
+
+        [RaspProperty]
+        public RPiGPIOPin RsPin
+        {
+            get { return port.rs_pin; }
+            set { port.rs_pin = value; port.needs_update = true; }
+        }
+
+        UInt32 lowCycle;
+        [RaspProperty]
+        public UInt32 LowCycle
+        {
+            get { return port.low_delay; }
+            set { port.high_delay = value; }
+        }
+
+        UInt32 highCycle;
+        [RaspProperty]
+        public UInt32 HighCycle
+        {
+            get { return highCycle; }
+            set { highCycle = value; }
+        }
+
+        public override event EventHandler<BufferEventArgs> ReadBegin;
+        public override event EventHandler<BufferEventArgs> ReadEnd;
+        public override event EventHandler<BufferEventArgs> WriteBegin;
+        public override event EventHandler<BufferEventArgs> WriteEnd;
+        public override event EventHandler<BufferEventArgs> TransferBegin;
+        public override event EventHandler<BufferEventArgs> TransferEnd;
+
+        bool rs = false;
+
+        [RaspInput(InputType = IOType.Signal)]
+        public void Rs(object sender, SignalEventArgs e)
+        {
+            rs = e.Signal;
+        }
+
+        public override void ReadBuffer(object sender, BufferEventArgs e)
+        {
+
+            Runner.AddTask((o) =>
+            {
+                if (ReadBegin != null)
+                    ReadBegin(this, e);
+
+                for (int buc = e.Offset; buc < e.Offset + e.Length; buc++)
+                    e.Buffer.buffer[buc] = BCM2835Managed.GPIOExtras.read_nibble_byte(port, rs);
+
+                if (ReadEnd != null)
+                    ReadEnd(this, e);
+            });
+        }
+
+        public override void WriteBuffer(object sender, BufferEventArgs e)
+        {
+            Runner.AddTask((o) =>
+            {
+                if (WriteBegin != null)
+                    WriteBegin(this, e);
+
+                for (int buc = e.Offset; buc < e.Offset + e.Length; buc++)
+                    BCM2835Managed.GPIOExtras.write_nibble_byte(port, rs, e.Buffer.buffer[buc], false);
+
+                if (WriteEnd != null)
+                    WriteEnd(this, e);
+            });
+        }
+
+        [RaspInput(InputType = IOType.Buffer)]
+        public void WriteHalfBuffer(object sender, BufferEventArgs e)
+        {
+            Runner.AddTask((o) =>
+            {
+                if (WriteBegin != null)
+                    WriteBegin(this, e);
+
+                for (int buc = e.Offset; buc < e.Offset + e.Length; buc++)
+                    BCM2835Managed.GPIOExtras.write_nibble_byte(port, rs, e.Buffer.buffer[buc], true);
+
+                if (WriteEnd != null)
+                    WriteEnd(this, e);
+            });
+        }
+
+        public override void TransferBuffer(object sender, BufferEventArgs e)
+        {
+            Runner.AddTask((o) =>
+            {
+                if (TransferBegin != null)
+                    TransferBegin(this, e);
+
+                for (int buc = e.Offset; buc < e.Offset + e.Length; buc++)
+                    BCM2835Managed.GPIOExtras.write_nibble_byte(port, rs, e.Buffer.buffer[buc], false);
+
+                for (int buc = e.Offset; buc < e.Offset + e.Length; buc++)
+                    e.Buffer.buffer[buc] = BCM2835Managed.GPIOExtras.read_nibble_byte(port, rs);
+
+                if (TransferEnd != null)
+                    TransferEnd(this, e);
+            });
+        }
+
+    }
+    
     [RaspElementCategory(Category = "Ports")]
     public class RaspSPIPort : RaspPort
     {
@@ -488,7 +358,6 @@ namespace RaspiSharp.Software
                 e.Buffer.Fill(0xFF, e.Offset, e.Length);
 
                 ArraySegment<byte> seg = new ArraySegment<byte>(e.Buffer.buffer, e.Offset, e.Length);
-
                 BCM2835Managed.bcm2835_spi_transfern(seg);
 
                 if (ReadEnd != null)

@@ -11,9 +11,6 @@ namespace RaspiSharp
 {
     public class RaspSPI : IDisposable
     {
-        IntPtr readBuffer;
-        IntPtr writeBuffer;
-
         bcm2835SPIMode dMode;
         public bcm2835SPIMode DataMode
         {
@@ -67,7 +64,7 @@ namespace RaspiSharp
         {
             byte[] read = new byte[Data.Length];
 
-            BCM2835Managed.bcm2835_spi_transfernb(Data, read, Data.Length);
+            BCM2835Managed.bcm2835_spi_transfernb(Data, read);
 
             return read;
 
@@ -75,13 +72,13 @@ namespace RaspiSharp
 
         public void TransferBuffer(byte[] Data)
         {
-            BCM2835Managed.bcm2835_spi_transfern(Data, Data.Length);
+            BCM2835Managed.bcm2835_spi_transfern(Data);
             
         }
 
         public unsafe void WriteBuffer(byte[] Data)
         {
-            BCM2835Managed.bcm2835_spi_writenb(Data, Data.Length);            
+            BCM2835Managed.bcm2835_spi_writenb(Data);            
         }
 
         public unsafe byte[] ReadBuffer(int Length)
@@ -91,7 +88,7 @@ namespace RaspiSharp
             for (int buc = 0; buc < Length; buc++)
                 data[buc] = 255;
 
-           BCM2835Managed.bcm2835_spi_transfern(data, data.Length);
+           BCM2835Managed.bcm2835_spi_transfern(data);
 
             return data;
 

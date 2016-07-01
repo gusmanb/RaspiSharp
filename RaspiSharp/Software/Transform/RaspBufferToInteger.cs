@@ -34,13 +34,13 @@ namespace RaspiSharp.Software
         {
             Runner.AddTask((o) =>
             {
-                int count = Math.Min(e.Length, 4);
+                int count = Math.Min(e.Length - offset, 4);
                 int value = 0;
                 int pos = 0;
 
                 if (order == ByteOrder.MSB)
                 {
-                    for (int buc = e.Offset + count - 1; buc > 0; buc--)
+                    for (int buc = e.Offset + offset + count - 1; buc >= e.Offset; buc--)
                     {
                         value |= e.Buffer.buffer[buc] << (pos * 8);
                         pos++;
@@ -48,7 +48,7 @@ namespace RaspiSharp.Software
                 }
                 else
                 {
-                    for (int buc = e.Offset ; buc < e.Offset + e.Length; buc++)
+                    for (int buc = e.Offset + offset; buc < e.Offset + offset + count; buc++)
                     {
                         value |= e.Buffer.buffer[buc] << (pos * 8);
                         pos++;

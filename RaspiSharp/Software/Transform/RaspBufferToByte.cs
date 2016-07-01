@@ -27,7 +27,7 @@ namespace RaspiSharp.Software
 			Runner.AddTask((o) =>
 			{
 
-                var val = e.Buffer.buffer[offset];
+                var val = e.Buffer.buffer[offset + e.Offset];
 
                 if (val != outputState)
                 {
